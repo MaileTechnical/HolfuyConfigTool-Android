@@ -14,9 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.holfuy.configtool.ui.state.MainUiState
 
 @Composable
-fun MainScreen()
+fun MainScreen(
+    uiState: MainUiState
+)
 {
     Column(
         modifier = Modifier
@@ -47,21 +50,12 @@ fun MainScreen()
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text("Connection Status")
-                Text("Disconnected")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text("Device Information")
-                Text("Model: --")
-                Text("Serial: --")
+                Text(
+                    if (uiState.connected)
+                        "Connected"
+                    else
+                        "Disconnected"
+                )
             }
         }
 
@@ -74,7 +68,7 @@ fun MainScreen()
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text("Firmware")
-                Text("Version: --")
+                Text("Version: ${uiState.firmwareVersion}")
             }
         }
 
@@ -87,7 +81,7 @@ fun MainScreen()
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text("Firmware File")
-                Text("No file selected")
+                Text(uiState.firmwareFile)
             }
         }
 

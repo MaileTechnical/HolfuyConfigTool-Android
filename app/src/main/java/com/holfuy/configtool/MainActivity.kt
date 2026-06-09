@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.holfuy.configtool.ui.theme.HolfuyConfigToolTheme
 import com.holfuy.configtool.ui.screens.MainScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.holfuy.configtool.ui.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +22,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             HolfuyConfigToolTheme {
-                MainScreen()
+                val viewModel: MainViewModel = viewModel()
+                
+                MainScreen(
+                    uiState = viewModel.uiState
+                )
             }
         }
     }
