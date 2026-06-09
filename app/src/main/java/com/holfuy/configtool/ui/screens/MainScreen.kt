@@ -39,7 +39,12 @@ fun MainScreen(
         Button(
             onClick = onConnectClick
         ) {
-            Text("Connect")
+            Text(
+                if (uiState.connecting)
+                    "Connecting..."
+                else
+                    "Connect"
+            )
         }
 
         Spacer(modifier = Modifier.height(24.dp))

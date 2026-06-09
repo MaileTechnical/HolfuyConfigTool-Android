@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                 MainScreen(
                     uiState = viewModel.uiState,
                     onConnectClick = {
-                        viewModel.simulateConnection()
+                        viewModel.connect()
                     }
                 )
             }
