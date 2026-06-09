@@ -25,7 +25,10 @@ class MainActivity : ComponentActivity() {
                 val viewModel: MainViewModel = viewModel()
                 
                 MainScreen(
-                    uiState = viewModel.uiState
+                    uiState = viewModel.uiState,
+                    onConnectClick = {
+                        viewModel.simulateConnection()
+                    }
                 )
             }
         }

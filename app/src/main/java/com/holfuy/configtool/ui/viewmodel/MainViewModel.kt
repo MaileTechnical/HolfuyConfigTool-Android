@@ -10,4 +10,12 @@ class MainViewModel : ViewModel()
 {
     var uiState by mutableStateOf(MainUiState())
         private set
+        
+    fun simulateConnection()
+    {
+        uiState = uiState.copy(
+            connected = true,
+            firmwareVersion = "2.7.3"
+        )
+    }
 }

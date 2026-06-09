@@ -18,7 +18,8 @@ import com.holfuy.configtool.ui.state.MainUiState
 
 @Composable
 fun MainScreen(
-    uiState: MainUiState
+    uiState: MainUiState,
+    onConnectClick: () -> Unit
 )
 {
     Column(
@@ -36,7 +37,7 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { }
+            onClick = onConnectClick
         ) {
             Text("Connect")
         }
