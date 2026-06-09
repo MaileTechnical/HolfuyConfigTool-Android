@@ -37,6 +37,7 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
+            enabled = uiState.canConnect,
             onClick = onConnectClick
         ) {
             Text(
@@ -94,6 +95,7 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
+            enabled = uiState.canSelectFirmware,
             onClick = { }
         ) {
             Text("Select Firmware")
@@ -102,6 +104,7 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Button(
+            enabled = uiState.canUpdateFirmware,
             onClick = { }
         ) {
             Text("Update Firmware")
