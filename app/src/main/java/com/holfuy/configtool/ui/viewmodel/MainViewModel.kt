@@ -4,17 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.holfuy.configtool.ui.state.MainUiState
-import com.holfuy.configtool.device.HolfuyDevice
-import com.holfuy.configtool.device.FakeHolfuyDevice
 import androidx.lifecycle.viewModelScope
+import com.holfuy.configtool.device.HolfuyDevice
+import com.holfuy.configtool.ui.state.MainUiState
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel()
+class MainViewModel(
+    private val device: HolfuyDevice
+) : ViewModel()
 {
     var uiState by mutableStateOf(MainUiState())
         private set
-    private val device: HolfuyDevice = FakeHolfuyDevice()
         
     fun connect()
     {
