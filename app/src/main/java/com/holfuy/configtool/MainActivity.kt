@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.holfuy.configtool.device.FakeHolfuyDevice
+import com.holfuy.configtool.device.DeviceProvider
 import com.holfuy.configtool.ui.screens.MainScreen
 import com.holfuy.configtool.ui.theme.HolfuyConfigToolTheme
 import com.holfuy.configtool.ui.viewmodel.MainViewModel
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         
                 val factory = remember {
                     MainViewModelFactory(
-                        FakeHolfuyDevice()
+                        DeviceProvider.createDevice()
                     )
                 }
         
