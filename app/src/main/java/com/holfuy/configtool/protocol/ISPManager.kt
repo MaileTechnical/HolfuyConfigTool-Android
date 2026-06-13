@@ -422,7 +422,7 @@ object ISPManager {
         connect_interface_index = 0
         usbInterface = usbDevice.getInterface(connect_interface_index)    
         readEndpoint = usbInterface!!.getEndpoint(read_endpoint_index)    
-        writeEndpoint = usbInterface!!.getEndpoint(write_endpoint_index)     
+        writeEndpoint = usbInterface!!.getEndpoint(write_endpoint_index) 
         usbConnection = usbManager.openDevice(usbDevice)  
         if (usbConnection == null) {    
             Log.i("ISPManager", "openUsbSession failed: usbConnection == null")    
