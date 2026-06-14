@@ -354,7 +354,7 @@ object ISPManager {
                     sendBuffer.size,
                     0
                 )    
-            Log.i("ISPManager", "isWrite=$isWrite    ,sendBuffer:  $display")    
+            Log.i("ISPPacket", "isWrite=$isWrite    ,sendBuffer:  $display")    
             readBuffer.fill(0)    
             val isRead =
                 connection.bulkTransfer(
@@ -365,7 +365,7 @@ object ISPManager {
                 )    
             val readBufferString = HEXTool.toHexString(readBuffer)    
             display = HEXTool.toDisPlayString(readBufferString)
-            Log.i("ISPManager", "isRead=$isRead    ,readBuffer:  $display")    
+            Log.i("ISPPacket", "isRead=$isRead    ,readBuffer:  $display")    
             if (isRead <= 0) {    
                 Thread.sleep(200)    
                 index++    
@@ -540,7 +540,7 @@ object ISPManager {
             )    
         val readBufferString = HEXTool.toHexString(readBuffer)    
         val display = HEXTool.toDisPlayString(readBufferString)    
-        Log.i("ISPManager", "i=$i    ,readBuffer:  $display")    
+        Log.i("ISPPacket", "i=$i    ,readBuffer:  $display")    
         if (i <= 0) {
             return null
         }    
@@ -563,6 +563,7 @@ object ISPManager {
     ): ByteArray? {
     
         val start = SystemClock.elapsedRealtime()
+        var zeroPacketCount = 0
     
         while ((SystemClock.elapsedRealtime() - start) < timeoutMs) {
     
@@ -576,25 +577,36 @@ object ISPManager {
             val resultPackNo = ISPCommandTool.toPackNo(readBuffer)
             val resultChecksum = ISPCommandTool.toChecksumByReadBuffer(readBuffer)
     
-            Log.i(
-                "ISPManager",
-                "waitForExpectedPacket " +
-                "resultPackNo=$resultPackNo " +
-                "expectedPackNo=$expectedPackNo " +
-                "checksum=$resultChecksum"
-            )
-    
             if (resultPackNo != expectedPackNo) {
+                if (resultPackNo == 0u) {
+                    zeroPacketCount++
+                    continue
+                }                
                 val readBufferString = HEXTool.toHexString(readBuffer)
                 val display = HEXTool.toDisPlayString(readBufferString)
-    
+
                 Log.i(
                     "ISPManager",
+                    "waitForExpectedPacket " +
+                    "resultPackNo=$resultPackNo " +
+                    "expectedPackNo=$expectedPackNo " +
+                    "checksum=$resultChecksum"
+                )  
+
+                Log.i(
+                    "ISPPacket",
                     "Ignoring unexpected packet: $display"
                 )
                 continue
             }
-    
+            
+            if (zeroPacketCount > 0) {
+                Log.i(
+                    "ISPManager", 
+                    "Ignored $zeroPacketCount zero packets while waiting for packNo=$expectedPackNo"
+                )
+            }
+         
             return readBuffer
         }
     
@@ -625,6 +637,6 @@ object ISPManager {
                 sendBuffer.size,
                 timeOut
             )    
-        Log.i("ISPManager", "i=$i    ,writeBuffer: $display")
+        Log.i("ISPPacket", "i=$i    ,writeBuffer: $display")
     }
 }
