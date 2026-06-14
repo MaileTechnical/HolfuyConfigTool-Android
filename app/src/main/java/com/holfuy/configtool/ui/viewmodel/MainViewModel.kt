@@ -61,13 +61,10 @@ class MainViewModel(
                 val connected = device.connect()
     
                 if (connected) {
-    
-                    val version = device.getFirmwareVersion()
-    
+     
                     uiState = uiState.copy(
                         connected = true,
                         connecting = false,
-                        firmwareVersion = version,
                         canSelectFirmware = true,
                         canUpdateFirmware = firmwareBytes != null
                     )

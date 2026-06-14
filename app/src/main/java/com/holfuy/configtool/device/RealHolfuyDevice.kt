@@ -69,56 +69,7 @@ class RealHolfuyDevice(
 
         return true
     }
-
-    override suspend fun getFirmwareVersion(): String
-    {
-        val result =
-            ISPManager.suspendCMD_GET_FWVER()
-    
-        if (!result.isChecksum) {
-            return "Checksum Error"
-        }
-    
-        val buffer =
-            result.buffer ?: return "No Response"
-            
-        readConfig()
-    
-        return ISPCommandTool.toFirmwareVersion(
-            buffer
-        )
-    }
-    
-    private suspend fun readConfig()
-    {
-        val buffer =
-            ISPManager.suspendCMD_READ_CONFIG()
-    
-        if (buffer == null) {
-    
-            Log.e(
-                "HolfuyUSB",
-                "READ_CONFIG returned null"
-            )
-    
-            return
-        }
-    
-        Log.i(
-            "HolfuyUSB",
-            "READ_CONFIG length=${buffer.size}"
-        )
-    
-        Log.i(
-            "HolfuyUSB",
-            "READ_CONFIG raw=${
-                buffer.joinToString(" ") {
-                    "%02X".format(it)
-                }
-            }"
-        )
-    }
-    
+   
     override suspend fun updateFirmware(
         firmwareBytes: ByteArray,
         onProgress: (Int) -> Unit

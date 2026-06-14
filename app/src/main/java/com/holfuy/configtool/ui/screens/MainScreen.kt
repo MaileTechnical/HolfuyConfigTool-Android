@@ -42,6 +42,7 @@ fun MainScreen(
         Button(
             enabled = 
                 uiState.canConnect && 
+                !uiState.connected &&
                 !uiState.updateInProgress,
             onClick = onConnectClick
         ) {
@@ -68,19 +69,6 @@ fun MainScreen(
                     else
                         "Disconnected"
                 )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text("Firmware")
-                Text("Version: ${uiState.firmwareVersion}")
             }
         }
 
