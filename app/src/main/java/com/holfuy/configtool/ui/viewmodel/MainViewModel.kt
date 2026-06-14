@@ -92,18 +92,32 @@ class MainViewModel(
     
     fun updateFirmware()
     {
-        val bytes =
-            firmwareBytes ?: return
+        val bytes = firmwareBytes ?: return
     
         viewModelScope.launch(Dispatchers.IO) {
         
-            val success =
-                device.updateFirmware(bytes)
-        
-            Log.i(
-                "HolfuyUSB",
-                "updateFirmware success=$success"
+            uiState = uiState.copy(
+                updateInProgress = true,
+                updateProgress = 0,
+                updateCompleted = false
             )
+            
+            val success =
+                device.updateFirmware(
+                    bytes
+                ) { progress ->
+            
+                    uiState = uiState.copy(
+                        updateProgress = progress
+                    )
+                }      
+                 
+            uiState = uiState.copy(
+                updateInProgress = false,
+                updateCompleted = success
+            )  
+            
+            Log.i("HolfuyUSB", "updateFirmware success=$success")
         }
     }
 }

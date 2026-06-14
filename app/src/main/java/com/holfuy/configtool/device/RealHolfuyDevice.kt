@@ -120,8 +120,9 @@ class RealHolfuyDevice(
     }
     
     override suspend fun updateFirmware(
-        firmwareBytes: ByteArray
-    ): Boolean
+        firmwareBytes: ByteArray,
+        onProgress: (Int) -> Unit
+    ): Boolean    
     {
         Log.i(
             "HolfuyUSB",
@@ -135,12 +136,14 @@ class RealHolfuyDevice(
             firmwareBytes,
             0u
         ) { _, progress ->
-    
+        
             Log.i(
                 "HolfuyUSB",
                 "UPDATE_BIN progress=$progress"
             )
-    
+        
+            onProgress(progress)
+        
             if (progress < 0) {
                 success = false
             }

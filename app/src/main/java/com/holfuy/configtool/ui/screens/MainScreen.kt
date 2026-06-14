@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +40,9 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            enabled = uiState.canConnect,
+            enabled = 
+                uiState.canConnect && 
+                !uiState.updateInProgress,
             onClick = onConnectClick
         ) {
             Text(
@@ -103,16 +106,43 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            enabled = uiState.canSelectFirmware,
+            enabled = 
+                uiState.canSelectFirmware &&
+                !uiState.updateInProgress,
             onClick = onSelectFirmwareClick
         ) {
             Text("Select Firmware")
         }
 
         Spacer(modifier = Modifier.height(8.dp))
+        
+        if (uiState.updateInProgress) {
+        
+            Spacer(modifier = Modifier.height(16.dp))
+        
+            LinearProgressIndicator(
+                progress = {
+                    uiState.updateProgress / 100f
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        
+            Text(
+                "${uiState.updateProgress}%"
+            )
+        }
+        
+        if (uiState.updateCompleted) {
+        
+            Text(
+                "Firmware update complete"
+            )
+        }
 
         Button(
-            enabled = uiState.canUpdateFirmware,
+            enabled = 
+                uiState.canUpdateFirmware &&
+                !uiState.updateInProgress,
             onClick = onUpdateFirmwareClick
         ) {
             Text("Update Firmware")

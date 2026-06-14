@@ -10,5 +10,8 @@ data class MainUiState(
     val errorMessage: String? = null,
     val canConnect: Boolean = true,
     val canSelectFirmware: Boolean = false,
-    val canUpdateFirmware: Boolean = false
+    val canUpdateFirmware: Boolean = false,
+    val updateInProgress: Boolean = false,
+    val updateProgress: Int = 0,
+    val updateCompleted: Boolean = false
 )

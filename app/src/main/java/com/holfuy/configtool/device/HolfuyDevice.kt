@@ -5,8 +5,9 @@ interface HolfuyDevice
     suspend fun connect(): Boolean
 
     suspend fun getFirmwareVersion(): String
-    
+
     suspend fun updateFirmware(
-        firmwareBytes: ByteArray
+        firmwareBytes: ByteArray,
+        onProgress: (Int) -> Unit
     ): Boolean
 }
