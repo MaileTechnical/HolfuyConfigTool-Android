@@ -5,6 +5,7 @@ import android.util.Log
 import com.holfuy.configtool.protocol.ISPManager
 import com.holfuy.configtool.usb.UsbDeviceProvider
 import com.holfuy.configtool.protocol.ISPCommandTool
+import com.holfuy.configtool.protocol.ISPCommands
 
 
 class RealHolfuyDevice(
@@ -80,9 +81,76 @@ class RealHolfuyDevice(
     
         val buffer =
             result.buffer ?: return "No Response"
+            
+        readConfig()
     
         return ISPCommandTool.toFirmwareVersion(
             buffer
         )
+    }
+    
+    private suspend fun readConfig()
+    {
+        val buffer =
+            ISPManager.suspendCMD_READ_CONFIG()
+    
+        if (buffer == null) {
+    
+            Log.e(
+                "HolfuyUSB",
+                "READ_CONFIG returned null"
+            )
+    
+            return
+        }
+    
+        Log.i(
+            "HolfuyUSB",
+            "READ_CONFIG length=${buffer.size}"
+        )
+    
+        Log.i(
+            "HolfuyUSB",
+            "READ_CONFIG raw=${
+                buffer.joinToString(" ") {
+                    "%02X".format(it)
+                }
+            }"
+        )
+    }
+    
+    override suspend fun updateFirmware(
+        firmwareBytes: ByteArray
+    ): Boolean
+    {
+        Log.i(
+            "HolfuyUSB",
+            "Starting firmware update (${firmwareBytes.size} bytes)"
+        )
+    
+        var success = true
+    
+        ISPManager.sendCMD_UPDATE_BIN(
+            ISPCommands.CMD_UPDATE_APROM,
+            firmwareBytes,
+            0u
+        ) { _, progress ->
+    
+            Log.i(
+                "HolfuyUSB",
+                "UPDATE_BIN progress=$progress"
+            )
+    
+            if (progress < 0) {
+                success = false
+            }
+        }
+    
+        Log.i(
+            "HolfuyUSB",
+            "Firmware update finished success=$success"
+        )
+    
+        return success
     }
 }

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.holfuy.configtool.device.HolfuyDevice
 import com.holfuy.configtool.ui.state.MainUiState
 import com.holfuy.configtool.usb.UsbDeviceProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -18,6 +19,23 @@ class MainViewModel(
 {
     var uiState by mutableStateOf(MainUiState())
         private set
+        
+    private var firmwareBytes: ByteArray? = null
+
+    fun setFirmware(
+        fileName: String,
+        bytes: ByteArray
+    )
+    {
+        firmwareBytes = bytes
+    
+        uiState = uiState.copy(
+            firmwareFile = fileName,
+            firmwareFileName = fileName,
+            firmwareSize = bytes.size,
+            canUpdateFirmware = uiState.connected
+        )
+    }
         
     fun connect()
     {
@@ -49,7 +67,9 @@ class MainViewModel(
                     uiState = uiState.copy(
                         connected = true,
                         connecting = false,
-                        firmwareVersion = version
+                        firmwareVersion = version,
+                        canSelectFirmware = true,
+                        canUpdateFirmware = firmwareBytes != null
                     )
                 }
                 else {
@@ -67,6 +87,23 @@ class MainViewModel(
                     errorMessage = e.message
                 )
             }
+        }
+    }
+    
+    fun updateFirmware()
+    {
+        val bytes =
+            firmwareBytes ?: return
+    
+        viewModelScope.launch(Dispatchers.IO) {
+        
+            val success =
+                device.updateFirmware(bytes)
+        
+            Log.i(
+                "HolfuyUSB",
+                "updateFirmware success=$success"
+            )
         }
     }
 }

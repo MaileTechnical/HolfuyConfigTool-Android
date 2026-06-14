@@ -1,5 +1,6 @@
 package com.holfuy.configtool.device
 
+import android.util.Log
 import kotlinx.coroutines.delay
 
 class FakeHolfuyDevice : HolfuyDevice
@@ -14,5 +15,24 @@ class FakeHolfuyDevice : HolfuyDevice
     {
         delay(250)
         return "2.7.3"
+    }
+    
+    override suspend fun updateFirmware(
+        firmwareBytes: ByteArray
+    ): Boolean
+    {
+        Log.i(
+            "HolfuyUSB",
+            "Starting firmware update (${firmwareBytes.size} bytes)"
+        )
+    
+        var success = true
+    
+        Log.i(
+            "HolfuyUSB",
+            "Firmware update finished success=$success"
+        )
+    
+        return success
     }
 }

@@ -1,5 +1,6 @@
 package com.holfuy.configtool
 
+import android.net.Uri
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
@@ -10,6 +11,8 @@ import android.hardware.usb.UsbManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holfuy.configtool.device.RealHolfuyDevice
@@ -94,6 +97,35 @@ class MainActivity : ComponentActivity()
                     factory = factory
                 )
                 
+                val firmwarePicker =
+                    rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.GetContent()
+                    ) { uri: Uri? ->
+                
+                        if (uri == null) {
+                            return@rememberLauncherForActivityResult
+                        }
+                
+                        val bytes =
+                            contentResolver
+                                .openInputStream(uri)
+                                ?.readBytes()
+                                ?: return@rememberLauncherForActivityResult
+                
+                        val fileName =
+                            uri.lastPathSegment ?: "firmware.bin"
+                
+                        Log.i(
+                            "HolfuyUSB",
+                            "Loaded firmware: $fileName (${bytes.size} bytes)"
+                        )
+                
+                        viewModel.setFirmware(
+                            fileName,
+                            bytes
+                        )
+                    }                
+                
                 MainScreen(
                     uiState = viewModel.uiState,
                     onConnectClick = {
@@ -131,7 +163,15 @@ class MainActivity : ComponentActivity()
                 
                             viewModel.connect()
                         }
-                    }
+                    },
+                        
+                    onSelectFirmwareClick = {
+                    
+                        firmwarePicker.launch("*/*")
+                    
+                    },
+                    
+                    onUpdateFirmwareClick = viewModel::updateFirmware         
                 )
             }
         }

@@ -5,6 +5,8 @@ data class MainUiState(
     val connecting: Boolean = false,
     val firmwareVersion: String = "--",
     val firmwareFile: String = "No file selected",
+    val firmwareFileName: String? = null,
+    val firmwareSize: Int? = null,
     val errorMessage: String? = null,
     val canConnect: Boolean = true,
     val canSelectFirmware: Boolean = false,

@@ -19,7 +19,9 @@ import com.holfuy.configtool.ui.state.MainUiState
 @Composable
 fun MainScreen(
     uiState: MainUiState,
-    onConnectClick: () -> Unit
+    onConnectClick: () -> Unit,
+    onSelectFirmwareClick: () -> Unit,
+    onUpdateFirmwareClick: () -> Unit
 )
 {
     Column(
@@ -87,16 +89,22 @@ fun MainScreen(
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text("Firmware File")
-                Text(uiState.firmwareFile)
-            }
+                  Text("Firmware File")
+                  
+                  Text(uiState.firmwareFile)
+                  
+                  uiState.firmwareSize?.let {
+                      Text("Size: $it bytes")
+                  }
+              }
+          
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             enabled = uiState.canSelectFirmware,
-            onClick = { }
+            onClick = onSelectFirmwareClick
         ) {
             Text("Select Firmware")
         }
@@ -105,7 +113,7 @@ fun MainScreen(
 
         Button(
             enabled = uiState.canUpdateFirmware,
-            onClick = { }
+            onClick = onUpdateFirmwareClick
         ) {
             Text("Update Firmware")
         }
