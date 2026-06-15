@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.util.Log
 import android.content.Intent
 import android.content.Context
+import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -40,25 +41,103 @@ class MainActivity : ComponentActivity()
                 intent: Intent
             )
             {
+                Log.i(
+                    "HolfuyUSB",
+                    "usbPermissionReceiver action=${intent.action}"
+                )
+    
                 if (intent.action == ACTION_USB_PERMISSION) {
+    
+                    val granted =
+                        intent.getBooleanExtra(
+                            UsbManager.EXTRA_PERMISSION_GRANTED,
+                            false
+                        )
     
                     Log.i(
                         "HolfuyUSB",
-                        "USB permission response received"
+                        "USB permission response received granted=$granted"
                     )
+                }
+            }
+        }
+
+    private val usbAttachReceiver =
+        object : BroadcastReceiver()
+        {
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            )
+            {
+                if (
+                    intent.action ==
+                    UsbManager.ACTION_USB_DEVICE_ATTACHED
+                ) {
+    
+                    Log.i(
+                        "HolfuyUSB",
+                        "USB device attached"
+                    )
+    
+                    val usbManager =
+                        context.getSystemService(
+                            Context.USB_SERVICE
+                        ) as UsbManager
+    
+                    val usbDevice =
+                        intent.getParcelableExtra(
+                            UsbManager.EXTRA_DEVICE,
+                            UsbDevice::class.java
+                        )
+    
+                    if (
+                        usbDevice != null &&
+                        !usbManager.hasPermission(usbDevice)
+                    ) {
+    
+                        Log.i(
+                            "HolfuyUSB",
+                            "Requesting USB permission from attach event"
+                        )
+    
+                        usbManager.requestPermission(
+                            usbDevice,
+                            permissionIntent
+                        )
+                    }
                 }
             }
         }
     
     override fun onCreate(savedInstanceState: Bundle?)
     {
+    
+        Log.i(
+            "HolfuyUSB",
+            "MainActivity onCreate"
+        )
+        
         super.onCreate(savedInstanceState)
         
         registerReceiver(
             usbPermissionReceiver,
             IntentFilter(ACTION_USB_PERMISSION),
             RECEIVER_NOT_EXPORTED
-        )        
+        )
+        
+        registerReceiver(
+            usbAttachReceiver,
+            IntentFilter(
+                UsbManager.ACTION_USB_DEVICE_ATTACHED
+            ),
+            RECEIVER_NOT_EXPORTED
+        )
+        
+        Log.i(
+            "HolfuyUSB",
+            "usbPermissionReceiver registered"
+        )   
    
         permissionIntent = PendingIntent.getBroadcast(
                 this,
@@ -179,10 +258,30 @@ class MainActivity : ComponentActivity()
     
     override fun onDestroy()
     {
+    
+        Log.i(
+            "HolfuyUSB",
+            "MainActivity onDestroy"
+        )
+        
         unregisterReceiver(
             usbPermissionReceiver
         )
+        
+        unregisterReceiver(
+            usbAttachReceiver
+        )
     
         super.onDestroy()
+    }
+    
+    override fun onResume()
+    {
+        super.onResume()
+    
+        Log.i(
+            "HolfuyUSB",
+            "MainActivity onResume"
+        )
     }
 }
