@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity()
     }
     
     private lateinit var permissionIntent: PendingIntent 
+    private lateinit var mainViewModel: MainViewModel
     
     private val usbPermissionReceiver =
         object : BroadcastReceiver()
@@ -109,6 +110,29 @@ class MainActivity : ComponentActivity()
                 }
             }
         }
+
+        private val usbDetachReceiver =
+            object : BroadcastReceiver()
+            {
+                override fun onReceive(
+                    context: Context,
+                    intent: Intent
+                )
+                {
+                    if (
+                        intent.action ==
+                        UsbManager.ACTION_USB_DEVICE_DETACHED
+                    ) {
+        
+                        Log.i(
+                            "HolfuyUSB",
+                            "USB device detached"
+                        )
+        
+                        mainViewModel.onUsbDetached()
+                    }
+                }
+            }
     
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -130,6 +154,14 @@ class MainActivity : ComponentActivity()
             usbAttachReceiver,
             IntentFilter(
                 UsbManager.ACTION_USB_DEVICE_ATTACHED
+            ),
+            RECEIVER_NOT_EXPORTED
+        )
+        
+        registerReceiver(
+            usbDetachReceiver,
+            IntentFilter(
+                UsbManager.ACTION_USB_DEVICE_DETACHED
             ),
             RECEIVER_NOT_EXPORTED
         )
@@ -175,6 +207,7 @@ class MainActivity : ComponentActivity()
                 val viewModel: MainViewModel = viewModel(
                     factory = factory
                 )
+                mainViewModel = viewModel
                 
                 val firmwarePicker =
                     rememberLauncherForActivityResult(
@@ -270,6 +303,10 @@ class MainActivity : ComponentActivity()
         
         unregisterReceiver(
             usbAttachReceiver
+        )
+        
+        unregisterReceiver(
+            usbDetachReceiver
         )
     
         super.onDestroy()

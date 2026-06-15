@@ -117,4 +117,17 @@ class MainViewModel(
             Log.i("HolfuyUSB", "updateFirmware success=$success")
         }
     }
+
+    fun onUsbDetached()
+    {
+
+        uiState = uiState.copy(
+            connected = false,
+            connecting = false,
+            canSelectFirmware = false,
+            canUpdateFirmware = false,
+            updateInProgress = false,
+            updateProgress = 0
+        )
+    }
 }
