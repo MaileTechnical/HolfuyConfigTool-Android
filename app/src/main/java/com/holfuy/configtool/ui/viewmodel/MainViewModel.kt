@@ -6,11 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import com.holfuy.configtool.device.DeviceRepository
 import com.holfuy.configtool.device.HolfuyDevice
 import com.holfuy.configtool.ui.state.MainUiState
 import com.holfuy.configtool.usb.UsbDeviceProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val device: HolfuyDevice,
@@ -61,7 +62,16 @@ class MainViewModel(
                 val connected = device.connect()
     
                 if (connected) {
-     
+                
+                    DeviceRepository.setConnected(
+                        true
+                    )
+                
+                    Log.i(
+                        "HolfuyUSB",
+                        "DeviceRepository state=${DeviceRepository.state}"
+                    )
+                
                     uiState = uiState.copy(
                         connected = true,
                         connecting = false,

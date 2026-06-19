@@ -82,10 +82,9 @@ class MainActivity : ComponentActivity()
                         "USB device attached"
                     )
                     
-                    DeviceRepository.state =
-                        DeviceRepository.state.copy(
-                            attached = true
-                        )
+                    DeviceRepository.setAttached( 
+                        true 
+                    )                      
                     
                     Log.i(
                         "HolfuyUSB",
@@ -139,11 +138,7 @@ class MainActivity : ComponentActivity()
                             "HolfuyUSB",
                             "USB device detached"
                         )
-                        DeviceRepository.state =
-                            DeviceRepository.state.copy(
-                                attached = false,
-                                permissionGranted = false
-                            )
+                        DeviceRepository.clearConnectionState()
                         
                         Log.i(
                             "HolfuyUSB",
