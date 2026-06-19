@@ -81,6 +81,16 @@ class MainActivity : ComponentActivity()
                         "HolfuyUSB",
                         "USB device attached"
                     )
+                    
+                    DeviceRepository.state =
+                        DeviceRepository.state.copy(
+                            attached = true
+                        )
+                    
+                    Log.i(
+                        "HolfuyUSB",
+                        "DeviceRepository state=${DeviceRepository.state}"
+                    )
     
                     val usbManager =
                         context.getSystemService(
@@ -128,6 +138,15 @@ class MainActivity : ComponentActivity()
                         Log.i(
                             "HolfuyUSB",
                             "USB device detached"
+                        )
+                        DeviceRepository.state =
+                            DeviceRepository.state.copy(
+                                attached = false
+                            )
+                        
+                        Log.i(
+                            "HolfuyUSB",
+                            "DeviceRepository state=${DeviceRepository.state}"
                         )
         
                         mainViewModel.onUsbDetached()
