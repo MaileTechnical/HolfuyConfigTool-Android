@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.holfuy.configtool.device.DeviceRepository
 import com.holfuy.configtool.device.RealHolfuyDevice
 import com.holfuy.configtool.ui.screens.MainScreen
 import com.holfuy.configtool.ui.theme.HolfuyConfigToolTheme
@@ -143,6 +144,11 @@ class MainActivity : ComponentActivity()
         )
         
         super.onCreate(savedInstanceState)
+        
+        Log.i(
+            "HolfuyUSB",
+            "DeviceRepository state=${DeviceRepository.state}"
+        )
         
         registerReceiver(
             usbPermissionReceiver,
