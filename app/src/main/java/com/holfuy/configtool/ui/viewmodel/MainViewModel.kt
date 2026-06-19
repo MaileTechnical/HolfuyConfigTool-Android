@@ -103,6 +103,19 @@ class MainViewModel(
     
         viewModelScope.launch(Dispatchers.IO) {
         
+            DeviceRepository.setUpdateInProgress(
+                true
+            )
+            
+            DeviceRepository.setUpdateProgress(
+                0
+            )
+            
+            Log.i(
+                "HolfuyUSB",
+                "DeviceRepository state=${DeviceRepository.state}"
+            )
+        
             uiState = uiState.copy(
                 updateInProgress = true,
                 updateProgress = 0,
@@ -113,11 +126,29 @@ class MainViewModel(
                 device.updateFirmware(
                     bytes
                 ) { progress ->
-            
+                
+                    DeviceRepository.setUpdateProgress(
+                        progress
+                    )
+                
                     uiState = uiState.copy(
                         updateProgress = progress
                     )
-                }      
+                
+                    Log.i(
+                        "HolfuyUSB",
+                        "Update progress=$progress repository=${DeviceRepository.state}"
+                    )
+                } 
+                
+            DeviceRepository.setUpdateInProgress(
+                false
+            )
+            
+            Log.i(
+                "HolfuyUSB",
+                "DeviceRepository state=${DeviceRepository.state}"
+            )     
                  
             uiState = uiState.copy(
                 updateInProgress = false,

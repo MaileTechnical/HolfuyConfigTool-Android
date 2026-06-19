@@ -36,7 +36,27 @@ object DeviceRepository
         state = state.copy(
             attached = false,
             permissionGranted = false,
-            connected = false
+            connected = false,
+            updateInProgress = false,
+            updateProgress = 0
+        )
+    }
+    
+    fun setUpdateInProgress(
+        inProgress: Boolean
+    )
+    {
+        state = state.copy(
+            updateInProgress = inProgress
+        )
+    }
+    
+    fun setUpdateProgress(
+        progress: Int
+    )
+    {
+        state = state.copy(
+            updateProgress = progress
         )
     }
 }
