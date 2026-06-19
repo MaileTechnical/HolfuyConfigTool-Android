@@ -141,7 +141,8 @@ class MainActivity : ComponentActivity()
                         )
                         DeviceRepository.state =
                             DeviceRepository.state.copy(
-                                attached = false
+                                attached = false,
+                                permissionGranted = false
                             )
                         
                         Log.i(
@@ -344,6 +345,31 @@ class MainActivity : ComponentActivity()
         Log.i(
             "HolfuyUSB",
             "MainActivity onResume"
+        )
+    
+        val usbManager =
+            getSystemService(
+                Context.USB_SERVICE
+            ) as UsbManager
+    
+        val usbDevice =
+            usbManager.deviceList
+                .values
+                .firstOrNull()
+    
+        val permissionGranted =
+            usbDevice != null &&
+            usbManager.hasPermission(
+                usbDevice
+            )
+    
+        DeviceRepository.setPermissionGranted(
+            permissionGranted
+        )
+    
+        Log.i(
+            "HolfuyUSB",
+            "DeviceRepository state=${DeviceRepository.state}"
         )
     }
 }
