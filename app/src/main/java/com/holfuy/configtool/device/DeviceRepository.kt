@@ -1,8 +1,25 @@
 package com.holfuy.configtool.device
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 object DeviceRepository
 {
-    var state = DeviceState()
+    private val _state =
+        MutableStateFlow(
+            DeviceState()
+        )
+
+    val stateFlow: StateFlow<DeviceState> =
+        _state.asStateFlow()
+
+    var state: DeviceState
+        get() = _state.value
+        set(value)
+        {
+            _state.value = value
+        }
 
     fun setAttached(
         attached: Boolean
@@ -12,7 +29,7 @@ object DeviceRepository
             attached = attached
         )
     }
-    
+
     fun setPermissionGranted(
         granted: Boolean
     )
@@ -21,7 +38,7 @@ object DeviceRepository
             permissionGranted = granted
         )
     }
-    
+
     fun setConnected(
         connected: Boolean
     )
@@ -30,18 +47,7 @@ object DeviceRepository
             connected = connected
         )
     }
-    
-    fun clearConnectionState()
-    {
-        state = state.copy(
-            attached = false,
-            permissionGranted = false,
-            connected = false,
-            updateInProgress = false,
-            updateProgress = 0
-        )
-    }
-    
+
     fun setUpdateInProgress(
         inProgress: Boolean
     )
@@ -50,13 +56,24 @@ object DeviceRepository
             updateInProgress = inProgress
         )
     }
-    
+
     fun setUpdateProgress(
         progress: Int
     )
     {
         state = state.copy(
             updateProgress = progress
+        )
+    }
+
+    fun clearConnectionState()
+    {
+        state = state.copy(
+            attached = false,
+            permissionGranted = false,
+            connected = false,
+            updateInProgress = false,
+            updateProgress = 0
         )
     }
 }

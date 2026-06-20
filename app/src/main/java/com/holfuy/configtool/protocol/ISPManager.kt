@@ -145,7 +145,11 @@ object ISPManager {
                 callback.invoke(readBuffer, -1)
                 return
             }
-            callback.invoke(readBuffer, (i.toDouble() / remainDataList.size * 100).toInt())
+            val progress = ((i + 1) * 100) / remainDataList.size
+            callback.invoke(
+                readBuffer,
+                progress
+            )
         }
         callback.invoke(readBuffer, 100)
     }

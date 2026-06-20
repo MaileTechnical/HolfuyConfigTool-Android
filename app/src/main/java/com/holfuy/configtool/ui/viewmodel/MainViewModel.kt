@@ -22,6 +22,31 @@ class MainViewModel(
         private set
         
     private var firmwareBytes: ByteArray? = null
+    
+    init {
+    
+        viewModelScope.launch {
+    
+            DeviceRepository.stateFlow.collect { deviceState ->
+    
+                Log.i(
+                    "HolfuyUSB",
+                    "ViewModel observed $deviceState"
+                )
+    
+                uiState = uiState.copy(
+                    connected =
+                        deviceState.connected,
+    
+                    updateInProgress =
+                        deviceState.updateInProgress,
+    
+                    updateProgress =
+                        deviceState.updateProgress
+                )
+            }
+        }
+    }
 
     fun setFirmware(
         fileName: String,
@@ -73,7 +98,6 @@ class MainViewModel(
                     )
                 
                     uiState = uiState.copy(
-                        connected = true,
                         connecting = false,
                         canSelectFirmware = true,
                         canUpdateFirmware = firmwareBytes != null
@@ -117,8 +141,6 @@ class MainViewModel(
             )
         
             uiState = uiState.copy(
-                updateInProgress = true,
-                updateProgress = 0,
                 updateCompleted = false
             )
             
@@ -129,10 +151,6 @@ class MainViewModel(
                 
                     DeviceRepository.setUpdateProgress(
                         progress
-                    )
-                
-                    uiState = uiState.copy(
-                        updateProgress = progress
                     )
                 
                     Log.i(
@@ -151,7 +169,6 @@ class MainViewModel(
             )     
                  
             uiState = uiState.copy(
-                updateInProgress = false,
                 updateCompleted = success
             )  
             
