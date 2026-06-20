@@ -40,10 +40,7 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            enabled = 
-                uiState.canConnect && 
-                !uiState.connected &&
-                !uiState.updateInProgress,
+            enabled = uiState.canConnect,
             onClick = onConnectClick
         ) {
             Text(
@@ -64,7 +61,7 @@ fun MainScreen(
             ) {
                 Text("Connection Status")
                 Text(
-                    if (uiState.connected)
+                    if (uiState.deviceState.connected)
                         "Connected"
                     else
                         "Disconnected"
@@ -96,7 +93,7 @@ fun MainScreen(
         Button(
             enabled = 
                 uiState.canSelectFirmware &&
-                !uiState.updateInProgress,
+                !uiState.deviceState.updateInProgress,
             onClick = onSelectFirmwareClick
         ) {
             Text("Select Firmware")
@@ -104,19 +101,19 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
         
-        if (uiState.updateInProgress) {
+        if (uiState.deviceState.updateInProgress) {
         
             Spacer(modifier = Modifier.height(16.dp))
         
             LinearProgressIndicator(
                 progress = {
-                    uiState.updateProgress / 100f
+                    uiState.deviceState.updateProgress / 100f
                 },
                 modifier = Modifier.fillMaxWidth()
             )
         
             Text(
-                "${uiState.updateProgress}%"
+                "${uiState.deviceState.updateProgress}%"
             )
         }
         
@@ -130,7 +127,7 @@ fun MainScreen(
         Button(
             enabled = 
                 uiState.canUpdateFirmware &&
-                !uiState.updateInProgress,
+                !uiState.deviceState.updateInProgress,
             onClick = onUpdateFirmwareClick
         ) {
             Text("Update Firmware")

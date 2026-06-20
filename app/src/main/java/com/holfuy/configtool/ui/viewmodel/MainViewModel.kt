@@ -28,21 +28,14 @@ class MainViewModel(
         viewModelScope.launch {
     
             DeviceRepository.stateFlow.collect { deviceState ->
-    
-                Log.i(
-                    "HolfuyUSB",
-                    "ViewModel observed $deviceState"
-                )
-    
+            
                 uiState = uiState.copy(
-                    connected =
-                        deviceState.connected,
-    
-                    updateInProgress =
-                        deviceState.updateInProgress,
-    
-                    updateProgress =
-                        deviceState.updateProgress
+                    deviceState = deviceState,
+                    canConnect =
+                        deviceState.attached &&
+                        deviceState.permissionGranted &&
+                        !deviceState.connected &&
+                        !deviceState.updateInProgress
                 )
             }
         }
@@ -59,7 +52,7 @@ class MainViewModel(
             firmwareFile = fileName,
             firmwareFileName = fileName,
             firmwareSize = bytes.size,
-            canUpdateFirmware = uiState.connected
+            canUpdateFirmware = uiState.deviceState.connected
         )
     }
         
@@ -180,12 +173,9 @@ class MainViewModel(
     {
 
         uiState = uiState.copy(
-            connected = false,
             connecting = false,
             canSelectFirmware = false,
-            canUpdateFirmware = false,
-            updateInProgress = false,
-            updateProgress = 0
+            canUpdateFirmware = false
         )
     }
 }
