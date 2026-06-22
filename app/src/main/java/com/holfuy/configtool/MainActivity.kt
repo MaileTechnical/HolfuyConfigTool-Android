@@ -14,6 +14,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holfuy.configtool.device.DeviceRepository
@@ -143,9 +145,7 @@ class MainActivity : ComponentActivity()
                         Log.i(
                             "HolfuyUSB",
                             "DeviceRepository state=${DeviceRepository.state}"
-                        )
-        
-                        mainViewModel.onUsbDetached()
+                        )       
                     }
                 }
             }
@@ -257,10 +257,13 @@ class MainActivity : ComponentActivity()
                             fileName,
                             bytes
                         )
-                    }                
+                    } 
+                    
+                val deviceState by viewModel.deviceStateFlow.collectAsState()                               
                 
                 MainScreen(
                     uiState = viewModel.uiState,
+                    deviceState = deviceState,
                     onConnectClick = {
                 
                         val usbDevice =

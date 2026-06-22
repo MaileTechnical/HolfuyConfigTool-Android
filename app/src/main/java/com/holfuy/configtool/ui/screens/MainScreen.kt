@@ -15,11 +15,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.holfuy.configtool.device.DeviceState
 import com.holfuy.configtool.ui.state.MainUiState
 
 @Composable
 fun MainScreen(
     uiState: MainUiState,
+    deviceState: DeviceState,
     onConnectClick: () -> Unit,
     onSelectFirmwareClick: () -> Unit,
     onUpdateFirmwareClick: () -> Unit
@@ -40,7 +42,11 @@ fun MainScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            enabled = uiState.canConnect,
+            enabled = 
+                deviceState.attached &&
+                deviceState.permissionGranted &&
+                !deviceState.connected &&
+                !deviceState.updateInProgress,
             onClick = onConnectClick
         ) {
             Text(
@@ -61,7 +67,7 @@ fun MainScreen(
             ) {
                 Text("Connection Status")
                 Text(
-                    if (uiState.deviceState.connected)
+                    if (deviceState.connected)
                         "Connected"
                     else
                         "Disconnected"
@@ -92,8 +98,8 @@ fun MainScreen(
 
         Button(
             enabled = 
-                uiState.canSelectFirmware &&
-                !uiState.deviceState.updateInProgress,
+                deviceState.connected &&
+                !deviceState.updateInProgress,
             onClick = onSelectFirmwareClick
         ) {
             Text("Select Firmware")
@@ -101,19 +107,19 @@ fun MainScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
         
-        if (uiState.deviceState.updateInProgress) {
+        if (deviceState.updateInProgress) {
         
             Spacer(modifier = Modifier.height(16.dp))
         
             LinearProgressIndicator(
                 progress = {
-                    uiState.deviceState.updateProgress / 100f
+                    deviceState.updateProgress / 100f
                 },
                 modifier = Modifier.fillMaxWidth()
             )
         
             Text(
-                "${uiState.deviceState.updateProgress}%"
+                "${deviceState.updateProgress}%"
             )
         }
         
@@ -126,8 +132,9 @@ fun MainScreen(
 
         Button(
             enabled = 
-                uiState.canUpdateFirmware &&
-                !uiState.deviceState.updateInProgress,
+                deviceState.connected &&
+                !deviceState.updateInProgress &&
+                uiState.firmwareFileName != null,
             onClick = onUpdateFirmwareClick
         ) {
             Text("Update Firmware")

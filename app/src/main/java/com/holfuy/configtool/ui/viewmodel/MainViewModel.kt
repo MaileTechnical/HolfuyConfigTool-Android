@@ -22,25 +22,8 @@ class MainViewModel(
         private set
         
     private var firmwareBytes: ByteArray? = null
+    val deviceStateFlow = DeviceRepository.stateFlow
     
-    init {
-    
-        viewModelScope.launch {
-    
-            DeviceRepository.stateFlow.collect { deviceState ->
-            
-                uiState = uiState.copy(
-                    deviceState = deviceState,
-                    canConnect =
-                        deviceState.attached &&
-                        deviceState.permissionGranted &&
-                        !deviceState.connected &&
-                        !deviceState.updateInProgress
-                )
-            }
-        }
-    }
-
     fun setFirmware(
         fileName: String,
         bytes: ByteArray
@@ -52,7 +35,6 @@ class MainViewModel(
             firmwareFile = fileName,
             firmwareFileName = fileName,
             firmwareSize = bytes.size,
-            canUpdateFirmware = uiState.deviceState.connected
         )
     }
         
@@ -91,9 +73,7 @@ class MainViewModel(
                     )
                 
                     uiState = uiState.copy(
-                        connecting = false,
-                        canSelectFirmware = true,
-                        canUpdateFirmware = firmwareBytes != null
+                        connecting = false
                     )
                 }
                 else {
@@ -167,15 +147,5 @@ class MainViewModel(
             
             Log.i("HolfuyUSB", "updateFirmware success=$success")
         }
-    }
-
-    fun onUsbDetached()
-    {
-
-        uiState = uiState.copy(
-            connecting = false,
-            canSelectFirmware = false,
-            canUpdateFirmware = false
-        )
     }
 }
