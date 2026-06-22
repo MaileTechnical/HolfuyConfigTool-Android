@@ -25,6 +25,7 @@ import com.holfuy.configtool.ui.theme.HolfuyConfigToolTheme
 import com.holfuy.configtool.ui.viewmodel.MainViewModel
 import com.holfuy.configtool.ui.viewmodel.MainViewModelFactory
 import com.holfuy.configtool.usb.AndroidUsbDeviceProvider
+import com.holfuy.configtool.usb.HolfuyUsb
 
 class MainActivity : ComponentActivity()
 {
@@ -52,6 +53,22 @@ class MainActivity : ComponentActivity()
     
                 if (intent.action == ACTION_USB_PERMISSION) {
     
+                    val usbDevice =
+                        intent.getParcelableExtra(
+                            UsbManager.EXTRA_DEVICE,
+                            UsbDevice::class.java
+                        ) ?: return
+    
+                    if (!HolfuyUsb.isSupported(usbDevice)) {
+    
+                        Log.i(
+                            "HolfuyUSB",
+                            "Ignoring permission response for unsupported device productId=0x${usbDevice.productId.toString(16)}"
+                        )
+    
+                        return
+                    }
+    
                     val granted =
                         intent.getBooleanExtra(
                             UsbManager.EXTRA_PERMISSION_GRANTED,
@@ -61,6 +78,10 @@ class MainActivity : ComponentActivity()
                     Log.i(
                         "HolfuyUSB",
                         "USB permission response received granted=$granted"
+                    )
+    
+                    DeviceRepository.setPermissionGranted(
+                        granted
                     )
                 }
             }
@@ -79,15 +100,31 @@ class MainActivity : ComponentActivity()
                     UsbManager.ACTION_USB_DEVICE_ATTACHED
                 ) {
     
+                    val usbDevice =
+                        intent.getParcelableExtra(
+                            UsbManager.EXTRA_DEVICE,
+                            UsbDevice::class.java
+                        ) ?: return
+    
+                    if (!HolfuyUsb.isSupported(usbDevice)) {
+    
+                        Log.i(
+                            "HolfuyUSB",
+                            "Ignoring unsupported USB device productId=0x${usbDevice.productId.toString(16)}"
+                        )
+    
+                        return
+                    }
+    
                     Log.i(
                         "HolfuyUSB",
-                        "USB device attached"
+                        "Supported USB device attached"
                     )
-                    
-                    DeviceRepository.setAttached( 
-                        true 
-                    )                      
-                    
+    
+                    DeviceRepository.setAttached(
+                        true
+                    )
+    
                     Log.i(
                         "HolfuyUSB",
                         "DeviceRepository state=${DeviceRepository.state}"
@@ -98,16 +135,7 @@ class MainActivity : ComponentActivity()
                             Context.USB_SERVICE
                         ) as UsbManager
     
-                    val usbDevice =
-                        intent.getParcelableExtra(
-                            UsbManager.EXTRA_DEVICE,
-                            UsbDevice::class.java
-                        )
-    
-                    if (
-                        usbDevice != null &&
-                        !usbManager.hasPermission(usbDevice)
-                    ) {
+                    if (!usbManager.hasPermission(usbDevice)) {
     
                         Log.i(
                             "HolfuyUSB",
@@ -123,32 +151,49 @@ class MainActivity : ComponentActivity()
             }
         }
 
-        private val usbDetachReceiver =
-            object : BroadcastReceiver()
+    private val usbDetachReceiver =
+        object : BroadcastReceiver()
+        {
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            )
             {
-                override fun onReceive(
-                    context: Context,
-                    intent: Intent
-                )
-                {
-                    if (
-                        intent.action ==
-                        UsbManager.ACTION_USB_DEVICE_DETACHED
-                    ) {
-        
+                if (
+                    intent.action ==
+                    UsbManager.ACTION_USB_DEVICE_DETACHED
+                ) {
+    
+                    val usbDevice =
+                        intent.getParcelableExtra(
+                            UsbManager.EXTRA_DEVICE,
+                            UsbDevice::class.java
+                        ) ?: return
+    
+                    if (!HolfuyUsb.isSupported(usbDevice)) {
+    
                         Log.i(
                             "HolfuyUSB",
-                            "USB device detached"
+                            "Ignoring detach of unsupported USB device productId=0x${usbDevice.productId.toString(16)}"
                         )
-                        DeviceRepository.clearConnectionState()
-                        
-                        Log.i(
-                            "HolfuyUSB",
-                            "DeviceRepository state=${DeviceRepository.state}"
-                        )       
+    
+                        return
                     }
+    
+                    Log.i(
+                        "HolfuyUSB",
+                        "Supported USB device detached"
+                    )
+    
+                    DeviceRepository.clearConnectionState()
+    
+                    Log.i(
+                        "HolfuyUSB",
+                        "DeviceRepository state=${DeviceRepository.state}"
+                    )
                 }
             }
+        }
     
     override fun onCreate(savedInstanceState: Bundle?)
     {

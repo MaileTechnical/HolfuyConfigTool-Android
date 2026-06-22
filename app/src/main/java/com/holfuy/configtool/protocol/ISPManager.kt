@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import kotlin.concurrent.thread
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
+import com.holfuy.configtool.usb.HolfuyUsb
 
 enum class NulinkInterfaceType(val value: Byte)
 {
@@ -412,29 +413,71 @@ object ISPManager {
         usbManager: UsbManager,
         usbDevice: UsbDevice
     ): Boolean {
+    
         Log.i("ISPManagerSession", "openUsbSession requested")
+    
+        if (!HolfuyUsb.isSupported(usbDevice)) {
+    
+            Log.w(
+                "ISPManagerSession",
+                "Unsupported USB device productId=0x${usbDevice.productId.toString(16)}"
+            )
+    
+            return false
+        }
+    
         if (
             usbConnection != null &&
             readEndpoint != null &&
             writeEndpoint != null
-        ) {        
-            Log.i("ISPManager", "openUsbSession already open") 
-            Log.i("ISPManagerSession", "USB session already OPEN")       
+        ) {
+    
+            Log.i("ISPManager", "openUsbSession already open")
+            Log.i("ISPManagerSession", "USB session already OPEN")
+    
             return true
-        }   
-
+        }
+    
         connect_interface_index = 0
-        usbInterface = usbDevice.getInterface(connect_interface_index)    
-        readEndpoint = usbInterface!!.getEndpoint(read_endpoint_index)    
-        writeEndpoint = usbInterface!!.getEndpoint(write_endpoint_index) 
-        usbConnection = usbManager.openDevice(usbDevice)  
-        if (usbConnection == null) {    
-            Log.i("ISPManager", "openUsbSession failed: usbConnection == null")    
+    
+        usbInterface =
+            usbDevice.getInterface(connect_interface_index)
+    
+        readEndpoint =
+            usbInterface!!.getEndpoint(read_endpoint_index)
+    
+        writeEndpoint =
+            usbInterface!!.getEndpoint(write_endpoint_index)
+    
+        usbConnection =
+            usbManager.openDevice(usbDevice)
+    
+        if (usbConnection == null) {
+    
+            Log.i(
+                "ISPManager",
+                "openUsbSession failed: usbConnection == null"
+            )
+    
             return false
-        }    
-        val claimed = usbConnection!!.claimInterface(usbInterface, forceClaim)    
-        Log.i("ISPManager", "openUsbSession claimInterface=$claimed")  
-        Log.i("ISPManagerSession", "USB session OPEN")  
+        }
+    
+        val claimed =
+            usbConnection!!.claimInterface(
+                usbInterface,
+                forceClaim
+            )
+    
+        Log.i(
+            "ISPManager",
+            "openUsbSession claimInterface=$claimed"
+        )
+    
+        Log.i(
+            "ISPManagerSession",
+            "USB session OPEN"
+        )
+    
         return claimed
     }
     
