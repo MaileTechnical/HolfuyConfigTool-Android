@@ -4,12 +4,13 @@ import android.net.Uri
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
-import android.util.Log
+import android.content.res.Configuration
 import android.content.Intent
 import android.content.Context
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -200,7 +201,16 @@ class MainActivity : ComponentActivity()
     
         Log.i(
             "HolfuyUSB",
-            "MainActivity onCreate"
+            "MainActivity onCreate savedInstanceState=${savedInstanceState != null}"
+        )
+        
+        val config = resources.configuration
+        
+        Log.i(
+            "HolfuyUSB",
+            "Config keyboard=${config.keyboard} " +
+            "hardKeyboardHidden=${config.hardKeyboardHidden} " +
+            "navigation=${config.navigation}"
         )
         
         super.onCreate(savedInstanceState)
@@ -360,10 +370,10 @@ class MainActivity : ComponentActivity()
     
     override fun onDestroy()
     {
-    
+
         Log.i(
             "HolfuyUSB",
-            "MainActivity onDestroy"
+            "MainActivity onDestroy changingConfigurations=$isChangingConfigurations"
         )
         
         unregisterReceiver(
@@ -413,6 +423,20 @@ class MainActivity : ComponentActivity()
         Log.i(
             "HolfuyUSB",
             "DeviceRepository state=${DeviceRepository.state}"
+        )
+    }
+    
+    override fun onConfigurationChanged(
+        newConfig: Configuration
+    )
+    {
+        super.onConfigurationChanged(newConfig)
+    
+        Log.i(
+            "HolfuyUSB",
+            "onConfigurationChanged keyboard=${newConfig.keyboard} " +
+            "hardKeyboardHidden=${newConfig.hardKeyboardHidden} " +
+            "navigation=${newConfig.navigation}"
         )
     }
 }
