@@ -20,12 +20,14 @@ enum class NulinkInterfaceType(val value: Byte)
     USB(0x00)
 }
 
+@Suppress("ArrayInDataClass")
 data class ConnectResult(
     val buffer: ByteArray?,
     val isChecksum: Boolean,
     val isTimeout: Boolean
 )
 
+@Suppress("ArrayInDataClass")
 data class CommandResult(
     val buffer: ByteArray?,
     val isChecksum: Boolean
@@ -665,25 +667,40 @@ object ISPManager {
     }
     
     @SuppressLint("NewApi")
-    private fun write(cmdArray: ByteArray) {    
+    private fun write(cmdArray: ByteArray)
+    {
         val connection = usbConnection
-        val endpoint = writeEndpoint    
-        if (connection == null || endpoint == null) {    
+        val endpoint = writeEndpoint
+    
+        if (connection == null || endpoint == null) {
+    
             Log.i(
-                "ISPManager", "write failed: USB session not open")    
+                "ISPManager",
+                "write failed: USB session not open"
+            )
+    
             return
-        }    
-        cmdArray[1] = interfaceType.value    
-        val sendBuffer = cmdArray    
-        val sendBufferString = HEXTool.toHexString(sendBuffer)    
-        val display = HEXTool.toDisPlayString(sendBufferString)    
+        }
+    
+        cmdArray[1] = interfaceType.value
+    
+        val sendBufferString =
+            HEXTool.toHexString(cmdArray)
+    
+        val display =
+            HEXTool.toDisPlayString(sendBufferString)
+    
         val i =
             connection.bulkTransfer(
                 endpoint,
-                sendBuffer,
-                sendBuffer.size,
+                cmdArray,
+                cmdArray.size,
                 timeOut
-            )    
-        Log.i("ISPPacket", "i=$i    ,writeBuffer: $display")
+            )
+    
+        Log.i(
+            "ISPPacket",
+            "i=$i, writeBuffer: $display"
+        )
     }
 }
