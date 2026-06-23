@@ -185,7 +185,7 @@ object ISPManager {
             callback.invoke(null)        
             return
         }        
-        var isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)        
+        this.isChecksum_PackNo(sendBuffer, readBuffer)        
         callback.invoke(readBuffer)
     }
     
@@ -208,7 +208,7 @@ object ISPManager {
         this.write( sendBuffer)
         val expectedPackNo = packetNumber + 1.toUInt()        
         val readBuffer = waitForExpectedPacket(expectedPackNo)
-        var isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)
+        val isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)
         callback.invoke(readBuffer, isChecksum)
     }
     
@@ -244,12 +244,12 @@ object ISPManager {
             if (isChackSum != true) return@sendCMD_ERASE_ALL
 
             //config＿1  先寫死
-            val cmd = ISPCommands.CMD_UPDATE_CONFIG
+            ISPCommands.CMD_UPDATE_CONFIG
             val sendBuffer = ISPCommandTool.toUpdataCongigeCMD(config0, config1, config2,config3, packetNumber)
             this.write( sendBuffer)
 
             val readBuffer = this.read()
-            var isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)
+            this.isChecksum_PackNo(sendBuffer, readBuffer)
 
             callback.invoke(readBuffer)
         }
@@ -350,7 +350,7 @@ object ISPManager {
                 "ISPManager",
                 "sendCMD cmd=CMD_CONNECT packetNumber=$packetNumber"
             )    
-            var sendBufferString = HEXTool.toHexString(sendBuffer)    
+            val sendBufferString = HEXTool.toHexString(sendBuffer)    
             var display = HEXTool.toDisPlayString(sendBufferString)    
             val isWrite =
                 connection.bulkTransfer(
@@ -509,7 +509,7 @@ object ISPManager {
         this.write( sendBuffer)
         val expectedPackNo = packetNumber + 1.toUInt()
         val readBuffer = waitForExpectedPacket(expectedPackNo)
-        var isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)
+        val isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)
         callback.invoke(readBuffer,isChecksum)
     }
     
