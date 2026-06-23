@@ -62,7 +62,7 @@ object HEXTool{
 
             display = display + array[i]
             if(i%8==0){
-                display = display + " , "
+                display = "$display , "
             }
         }
         return display

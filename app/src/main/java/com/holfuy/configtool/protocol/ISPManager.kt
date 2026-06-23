@@ -116,7 +116,7 @@ object ISPManager {
 
         callback.invoke(readBuffer, 0) //5% 起跳
 
-        if(isChecksum != true){
+        if(!isChecksum){
             callback.invoke(readBuffer, -1)
             return
         }
@@ -143,7 +143,7 @@ object ISPManager {
                 }"
             )
             isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)
-            if(isChecksum != true){
+            if(!isChecksum){
                 callback.invoke(readBuffer, -1)
                 return
             }
@@ -240,9 +240,9 @@ object ISPManager {
 
     fun sendCMD_UPDATE_CONFIG(config0: UInt,config1: UInt,config2: UInt,config3: UInt, callback: ((ByteArray?) -> Unit)) {
 
-        sendCMD_ERASE_ALL() { readArray, isChackSum ->
+        sendCMD_ERASE_ALL { readArray, isChackSum ->
 
-            if (isChackSum != true) return@sendCMD_ERASE_ALL
+            if (!isChackSum) return@sendCMD_ERASE_ALL
 
             //config＿1  先寫死
             ISPCommands.CMD_UPDATE_CONFIG

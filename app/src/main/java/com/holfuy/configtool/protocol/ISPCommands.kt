@@ -49,7 +49,7 @@ object ISPCommandTool {
     fun toUpdataBin_CMD(cmd: ISPCommands, packetNumber: UInt, startAddress: UInt, size: Int, data: ByteArray,isFirst:Boolean): ByteArray {
 
         var sendBytes = byteArrayOf()
-        if(isFirst == true){
+        if(isFirst){
             //第一次CMD
             val cmdBytes = HEXTool.UIntTo4Bytes(cmd.value)
             val packetNumberBytes = HEXTool.UIntTo4Bytes(packetNumber)
