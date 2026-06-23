@@ -1,7 +1,5 @@
 package com.holfuy.configtool.ui.state
 
-import com.holfuy.configtool.device.DeviceState
-
 data class MainUiState(
     val connecting: Boolean = false,
     val firmwareFile: String = "No file selected",

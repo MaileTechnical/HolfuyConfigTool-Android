@@ -1,19 +1,18 @@
 package com.holfuy.configtool.protocol
 
 import android.annotation.SuppressLint
+import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbEndpoint
 import android.hardware.usb.UsbInterface
-import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
 import androidx.annotation.RequiresApi
-import kotlin.concurrent.thread
+import com.holfuy.configtool.usb.HolfuyUsb
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import com.holfuy.configtool.usb.HolfuyUsb
 
 enum class NulinkInterfaceType(val value: Byte)
 {

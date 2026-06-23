@@ -1,9 +1,5 @@
 package com.holfuy.configtool.protocol
 
-import android.util.Log
-import java.math.BigInteger
-import com.holfuy.configtool.protocol.HEXTool
-
 enum class ISPCommands (val value: UInt){
     //value 為 Int
     CMD_REMAIN_PACKET    ((0x00000000).toUInt()),
