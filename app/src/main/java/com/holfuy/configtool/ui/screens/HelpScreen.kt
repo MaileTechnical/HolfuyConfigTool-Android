@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -16,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun HelpScreen(
@@ -38,6 +41,7 @@ fun HelpScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .padding(16.dp)
     ) {
 
@@ -60,8 +64,8 @@ fun HelpScreen(
             modifier = Modifier.height(16.dp)
         )
 
-        Text(
-            text = helpText,
+        MarkdownText(
+            markdown = helpText,
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(
