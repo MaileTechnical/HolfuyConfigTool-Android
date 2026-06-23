@@ -43,6 +43,46 @@ class MainActivity : ComponentActivity()
     private lateinit var permissionIntent: PendingIntent 
     private lateinit var mainViewModel: MainViewModel
     
+    private fun registerReceivers()
+    {
+        registerReceiver(
+            usbPermissionReceiver,
+            IntentFilter(ACTION_USB_PERMISSION),
+            RECEIVER_NOT_EXPORTED
+        )
+        
+        registerReceiver(
+            usbAttachReceiver,
+            IntentFilter(
+                UsbManager.ACTION_USB_DEVICE_ATTACHED
+            ),
+            RECEIVER_NOT_EXPORTED
+        )
+        
+        registerReceiver(
+            usbDetachReceiver,
+            IntentFilter(
+                UsbManager.ACTION_USB_DEVICE_DETACHED
+            ),
+            RECEIVER_NOT_EXPORTED
+        )    
+    }
+    
+    private fun unregisterReceivers()
+    {
+        unregisterReceiver(
+            usbPermissionReceiver
+        )
+        
+        unregisterReceiver(
+            usbAttachReceiver
+        )
+        
+        unregisterReceiver(
+            usbDetachReceiver
+        )
+    }
+    
     private val usbPermissionReceiver =
         object : BroadcastReceiver()
         {
@@ -224,33 +264,8 @@ class MainActivity : ComponentActivity()
             "DeviceRepository state=${DeviceRepository.state}"
         )
         
-        registerReceiver(
-            usbPermissionReceiver,
-            IntentFilter(ACTION_USB_PERMISSION),
-            RECEIVER_NOT_EXPORTED
-        )
-        
-        registerReceiver(
-            usbAttachReceiver,
-            IntentFilter(
-                UsbManager.ACTION_USB_DEVICE_ATTACHED
-            ),
-            RECEIVER_NOT_EXPORTED
-        )
-        
-        registerReceiver(
-            usbDetachReceiver,
-            IntentFilter(
-                UsbManager.ACTION_USB_DEVICE_DETACHED
-            ),
-            RECEIVER_NOT_EXPORTED
-        )
-        
-        Log.i(
-            "HolfuyUSB",
-            "usbPermissionReceiver registered"
-        )   
-   
+        registerReceivers()
+
         permissionIntent = PendingIntent.getBroadcast(
                 this,
                 0,
@@ -401,18 +416,8 @@ class MainActivity : ComponentActivity()
             "MainActivity onDestroy changingConfigurations=$isChangingConfigurations"
         )
         
-        unregisterReceiver(
-            usbPermissionReceiver
-        )
+        unregisterReceivers()
         
-        unregisterReceiver(
-            usbAttachReceiver
-        )
-        
-        unregisterReceiver(
-            usbDetachReceiver
-        )
-    
         super.onDestroy()
     }
     
