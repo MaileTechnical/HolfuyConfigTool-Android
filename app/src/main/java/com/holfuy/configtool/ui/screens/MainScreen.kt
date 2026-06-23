@@ -24,21 +24,30 @@ fun MainScreen(
     deviceState: DeviceState,
     onConnectClick: () -> Unit,
     onSelectFirmwareClick: () -> Unit,
-    onUpdateFirmwareClick: () -> Unit
+    onUpdateFirmwareClick: () -> Unit,
+    onHelpClick: () -> Unit
 )
-{
+{ 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.Top
     )
-    {
+    {      
         Text(
             text = "Holfuy Config Tool",
             style = MaterialTheme.typography.headlineMedium
         )
-
+        
+        Spacer(modifier = Modifier.height(8.dp))
+        
+        Button(
+            onClick = onHelpClick
+        ) {
+            Text("Help")
+        }
+        
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(

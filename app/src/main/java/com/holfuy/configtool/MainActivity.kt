@@ -17,16 +17,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holfuy.configtool.device.DeviceRepository
 import com.holfuy.configtool.device.RealHolfuyDevice
 import com.holfuy.configtool.ui.screens.MainScreen
+import com.holfuy.configtool.ui.screens.HelpScreen
 import com.holfuy.configtool.ui.theme.HolfuyConfigToolTheme
 import com.holfuy.configtool.ui.viewmodel.MainViewModel
 import com.holfuy.configtool.ui.viewmodel.MainViewModelFactory
 import com.holfuy.configtool.usb.AndroidUsbDeviceProvider
 import com.holfuy.configtool.usb.HolfuyUsb
+
 
 class MainActivity : ComponentActivity()
 {
@@ -314,56 +318,77 @@ class MainActivity : ComponentActivity()
                         )
                     } 
                     
-                val deviceState by viewModel.deviceStateFlow.collectAsState()                               
+                val deviceState by viewModel.deviceStateFlow.collectAsState()
                 
-                MainScreen(
-                    uiState = viewModel.uiState,
-                    deviceState = deviceState,
-                    onConnectClick = {
+                var showHelp by remember {
+                    mutableStateOf(false)
+                }
                 
-                        val usbDevice =
-                            usbDeviceProvider.findDevice()
+                if (showHelp) {
                 
-                        if (usbDevice == null) {
-                
-                            Log.i(
-                                "HolfuyUSB",
-                                "No USB device found"
-                            )
-                
-                            viewModel.connect()
+                    HelpScreen(
+                        onBack = {
+                            showHelp = false
                         }
-                        else if (!usbManager.hasPermission(usbDevice)) {
+                    )
                 
-                            Log.i(
-                                "HolfuyUSB",
-                                "Requesting USB permission"
-                            )
+                } else {
                 
-                            usbManager.requestPermission(
-                                usbDevice,
-                                permissionIntent
-                            )
+                    MainScreen(
+                        uiState = viewModel.uiState,
+                        deviceState = deviceState,
+                
+                        onConnectClick = {
+                
+                            val usbDevice =
+                                usbDeviceProvider.findDevice()
+                
+                            if (usbDevice == null) {
+                
+                                Log.i(
+                                    "HolfuyUSB",
+                                    "No USB device found"
+                                )
+                
+                                viewModel.connect()
+                            }
+                            else if (!usbManager.hasPermission(usbDevice)) {
+                
+                                Log.i(
+                                    "HolfuyUSB",
+                                    "Requesting USB permission"
+                                )
+                
+                                usbManager.requestPermission(
+                                    usbDevice,
+                                    permissionIntent
+                                )
+                            }
+                            else {
+                
+                                Log.i(
+                                    "HolfuyUSB",
+                                    "USB permission already granted"
+                                )
+                
+                                viewModel.connect()
+                            }
+                        },
+                
+                        onSelectFirmwareClick = {
+                
+                            firmwarePicker.launch("*/*")
+                
+                        },
+                
+                        onUpdateFirmwareClick =
+                            viewModel::updateFirmware,
+                
+                        onHelpClick = {
+                            showHelp = true
                         }
-                        else {
-                
-                            Log.i(
-                                "HolfuyUSB",
-                                "USB permission already granted"
-                            )
-                
-                            viewModel.connect()
-                        }
-                    },
-                        
-                    onSelectFirmwareClick = {
-                    
-                        firmwarePicker.launch("*/*")
-                    
-                    },
-                    
-                    onUpdateFirmwareClick = viewModel::updateFirmware         
-                )
+                    )
+                }
             }
         }
     }
