@@ -9,7 +9,7 @@ To use HolfuyConfigTool, you will need:
 * A USB cable with a Micro-B connector for the Holfuy station and a connector compatible with your Android device (USB-A or USB-C).
 * A firmware file stored on your Android device.
 
-Before starting, copy the firmware file to a location that is easy to find, such as the Downloads folder or a folder named "Holfuy".
+Before starting, copy the firmware file to a location on your Android device that is easy to find, such as the Downloads folder or a folder named "Holfuy".
 
 ## Firmware Update Procedure
 
@@ -21,7 +21,7 @@ Before starting, copy the firmware file to a location that is easy to find, such
 6. Tap **Connect**.
 7. Tap **Select Firmware** and browse to the firmware file you want to install.
 8. Tap **Update Firmware**.
-9. Wait for the update to complete. Do not disconnect Android device from station during the update process.
+9. Wait for the update to complete. Do not disconnect the Android device from the station during the update process.
 10. Turn off the station.
 11. Disconnect the USB cable.
 12. Reconnect the solar panel to the station.
