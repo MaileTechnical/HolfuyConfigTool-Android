@@ -16,14 +16,9 @@ enum class ISPCommands (val value: UInt){
     CMD_RESET			 ((0x000000AD).toUInt()),
     CMD_CONNECT			 ((0x000000AE).toUInt()),
     CMD_RESEND_PACKET    ((0x000000FF).toUInt()),
-    // Support SPI Flash
-    CMD_ERASE_SPIFLASH   ((0x000000D0).toUInt()),
-    CMD_UPDATE_SPIFLASH  ((0x000000D1).toUInt()),
 }
 
 object ISPCommandTool {
-
-    private var TAG = "ISPCommandTool"
 
     fun toCMD(CMD:ISPCommands,packetNumber:UInt):ByteArray{
 

@@ -38,10 +38,8 @@ object ISPManager {
     private var read_endpoint_index = 0
     private var write_endpoint_index = 1
     private var connect_interface_index = 0
-    private var byteSize = 64
     private val forceClaim = true
     private val timeOut = 100
-    private val isSearchLoop = false
 
     public var packetNumber: UInt = (0x00000005).toUInt()
     public var interfaceType : NulinkInterfaceType = NulinkInterfaceType.USB
@@ -50,9 +48,6 @@ object ISPManager {
     private var usbInterface: UsbInterface? = null
     private var readEndpoint: UsbEndpoint? = null
     private var writeEndpoint: UsbEndpoint? = null
-
-    private var _readListener: ((ByteArray) -> Unit)? = null
-    private var _byteArrayResultListener: ((ByteArray) -> Unit)? = null
 
     fun sendCMD_UPDATE_BIN(cmd: ISPCommands ,sendByteArray:ByteArray,startAddress:UInt, callback: ((ByteArray?, Int) -> Unit)) {
 
