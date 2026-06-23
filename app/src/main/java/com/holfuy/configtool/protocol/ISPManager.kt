@@ -39,7 +39,6 @@ object ISPManager {
     private var write_endpoint_index = 1
     private var connect_interface_index = 0
     private val forceClaim = true
-    private val timeOut = 100
 
     public var packetNumber: UInt = (0x00000005).toUInt()
     public var interfaceType : NulinkInterfaceType = NulinkInterfaceType.USB
@@ -689,7 +688,7 @@ object ISPManager {
                 endpoint,
                 cmdArray,
                 cmdArray.size,
-                timeOut
+                100
             )
     
         Log.i(
