@@ -2,6 +2,7 @@ package com.holfuy.configtool
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -10,6 +11,7 @@ import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -44,6 +46,30 @@ class MainActivity : ComponentActivity()
     
     private lateinit var permissionIntent: PendingIntent 
     private lateinit var mainViewModel: MainViewModel
+    
+    private fun getDisplayName(
+        contentResolver: ContentResolver,
+        uri: Uri
+    ): String
+    {
+        contentResolver.query(
+            uri,
+            arrayOf(OpenableColumns.DISPLAY_NAME),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+    
+            val nameIndex =
+                cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+    
+            if (nameIndex >= 0 && cursor.moveToFirst()) {
+                return cursor.getString(nameIndex)
+            }
+        }
+    
+        return "firmware.bin"
+    }
     
     private fun registerReceivers()
     {
@@ -320,7 +346,10 @@ class MainActivity : ComponentActivity()
                                 ?: return@rememberLauncherForActivityResult
                 
                         val fileName =
-                            uri.lastPathSegment ?: "firmware.bin"
+                            getDisplayName(
+                                contentResolver,
+                                uri
+                            )
                 
                         Log.i(
                             TAG,
