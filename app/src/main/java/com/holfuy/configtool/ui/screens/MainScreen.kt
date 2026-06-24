@@ -36,7 +36,7 @@ fun MainScreen(
     )
     {      
         Text(
-            text = "Holfuy Config Tool",
+            text = "Holfuy Upgrader",
             style = MaterialTheme.typography.headlineMedium
         )
         
