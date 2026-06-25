@@ -39,6 +39,8 @@ object ISPManager {
     private var write_endpoint_index = 1
     private var connect_interface_index = 0
     private val forceClaim = true
+    private val TAG = "HolfuyUSB-ISP"
+    private val TAGP = "HolfuyUSB-Pkt"
 
     public var packetNumber: UInt = (0x00000005).toUInt()
     public var interfaceType : NulinkInterfaceType = NulinkInterfaceType.USB
@@ -85,20 +87,20 @@ object ISPManager {
             }
 
         }
-        Log.i("ISPManager", "CMD_UPDATE   CMD:"+cmd.toString()+"  size:"+sendByteArray.size+"  allPackNum:"+dataArray.size+1)
+        Log.i(TAG, "CMD_UPDATE   CMD:"+cmd.toString()+"  size:"+sendByteArray.size+"  allPackNum:"+dataArray.size+1)
         var sendBuffer = ISPCommandTool.toUpdataBin_CMD(cmd, packetNumber , startAddress , sendByteArray.size , firstData , true)
         this.write(sendBuffer)        
         var readBuffer = waitForExpectedPacket(packetNumber + 1u, timeoutMs = 20000)
         if (readBuffer == null) {
             Log.i(
-                "ISPManager",
+                TAG,
                 "UPDATE_BIN timeout waiting for packet ${packetNumber + 1u}"
             )
             callback.invoke(null, -1)
             return
         }       
         Log.i(
-            "ISPManager",
+            TAG,
             "UPDATE_BIN first block expected=${packetNumber + 1u} actual=${
                 if (readBuffer != null)
                     ISPCommandTool.toPackNo(readBuffer)
@@ -121,14 +123,14 @@ object ISPManager {
             readBuffer = waitForExpectedPacket(packetNumber + 1u, timeoutMs = 20000)   
             if (readBuffer == null) {
                 Log.i(
-                    "ISPManager",
+                    TAG,
                     "UPDATE_BIN timeout waiting for packet ${packetNumber + 1u}"
                 )
                 callback.invoke(null, -1)
                 return
             }     
             Log.i(
-                "ISPManager",
+                TAG,
                 "UPDATE_BIN block=$i expected=${packetNumber + 1u} actual=${
                     if (readBuffer != null)
                         ISPCommandTool.toPackNo(readBuffer)
@@ -160,7 +162,7 @@ object ISPManager {
         val readBuffer = this.read()
         val isChecksum = this.isChecksum_PackNo(sendBuffer, readBuffer)        
         Log.i(
-            "ISPManager",
+            TAG,
             "ERASE_ALL ackPackNo=${readBuffer?.let { ISPCommandTool.toPackNo(it) } ?: "null"} checksum=$isChecksum"
         )
 
@@ -171,12 +173,12 @@ object ISPManager {
 
         val cmd = ISPCommands.CMD_READ_CONFIG       
         val sendBuffer = ISPCommandTool.toCMD(cmd, packetNumber)        
-        Log.i("ISPManager", "sendCMD cmd=$cmd packetNumber=$packetNumber")        
+        Log.i(TAG, "sendCMD cmd=$cmd packetNumber=$packetNumber")        
         this.write(sendBuffer)        
         val expectedPackNo = packetNumber + 1.toUInt()        
         val readBuffer = waitForExpectedPacket(expectedPackNo)        
         if (readBuffer == null) {        
-            Log.i("ISPManager", "READ_CONFIG readBuffer == null")        
+            Log.i(TAG, "READ_CONFIG readBuffer == null")        
             callback.invoke(null)        
             return
         }        
@@ -199,7 +201,7 @@ object ISPManager {
         
         val cmd = ISPCommands.CMD_GET_FWVER
         val sendBuffer = ISPCommandTool.toCMD(cmd, packetNumber)
-        Log.i("ISPManager", "sendCMD cmd=${cmd} packetNumber=$packetNumber")
+        Log.i(TAG, "sendCMD cmd=${cmd} packetNumber=$packetNumber")
         this.write( sendBuffer)
         val expectedPackNo = packetNumber + 1.toUInt()        
         val readBuffer = waitForExpectedPacket(expectedPackNo)
@@ -262,7 +264,7 @@ object ISPManager {
         val packNoBytes = HEXTool.UIntTo4Bytes(packetNumber)    
         System.arraycopy(packNoBytes, 0, sendBuffer, 8, 4)    
         Log.i(
-            "ISPManager",
+            TAG,
             "sendCMD cmd=$cmd " +
             "packetNumber=$packetNumber " +
             "syncPackNo=$packetNumber"
@@ -321,7 +323,7 @@ object ISPManager {
             readEndpoint == null ||
             writeEndpoint == null
         ) {        
-            Log.i("ISPManager", "executeConnect: USB session not open")        
+            Log.i(TAG, "executeConnect: USB session not open")        
             callback.invoke(null, true)        
             return
         }
@@ -342,7 +344,7 @@ object ISPManager {
                     packetNumber
                 )    
             Log.i(
-                "ISPManager",
+                TAG,
                 "sendCMD cmd=CMD_CONNECT packetNumber=$packetNumber"
             )    
             val sendBufferString = HEXTool.toHexString(sendBuffer)    
@@ -354,7 +356,7 @@ object ISPManager {
                     sendBuffer.size,
                     0
                 )    
-            Log.i("ISPPacket", "isWrite=$isWrite    ,sendBuffer:  $display")    
+            Log.i(TAGP, "isWrite=$isWrite    ,sendBuffer:  $display")    
             readBuffer.fill(0)    
             val isRead =
                 connection.bulkTransfer(
@@ -365,22 +367,22 @@ object ISPManager {
                 )    
             val readBufferString = HEXTool.toHexString(readBuffer)    
             display = HEXTool.toDisPlayString(readBufferString)
-            Log.i("ISPPacket", "isRead=$isRead    ,readBuffer:  $display")    
+            Log.i(TAGP, "isRead=$isRead    ,readBuffer:  $display")    
             if (isRead <= 0) {    
                 Thread.sleep(200)    
                 index++    
-                Log.i("ISPManager", "index=$index")
+                Log.i(TAG, "index=$index")
                 continue
             }    
             val allZero = readBuffer.all { it == 0.toByte() }    
             if (!allZero) {    
-                Log.i("ISPManager", "Holfuy entered ISP mode")    
+                Log.i(TAG, "Holfuy entered ISP mode")    
                 callback.invoke(readBuffer, false)    
                 return
             }    
             Thread.sleep(200)    
             index++    
-            Log.i("ISPManager", "index=$index")
+            Log.i(TAG, "index=$index")
         }
         closeUsbSession()
         callback.invoke(null, true)
@@ -427,8 +429,7 @@ object ISPManager {
             writeEndpoint != null
         ) {
     
-            Log.i("ISPManager", "openUsbSession already open")
-            Log.i("ISPManagerSession", "USB session already OPEN")
+            Log.i(TAG, "openUsbSession already open")
     
             return true
         }
@@ -450,7 +451,7 @@ object ISPManager {
         if (usbConnection == null) {
     
             Log.i(
-                "ISPManager",
+                TAG,
                 "openUsbSession failed: usbConnection == null"
             )
     
@@ -464,7 +465,7 @@ object ISPManager {
             )
     
         Log.i(
-            "ISPManager",
+            TAG,
             "openUsbSession claimInterface=$claimed"
         )
     
@@ -492,15 +493,14 @@ object ISPManager {
         usbInterface = null
         readEndpoint = null
         writeEndpoint = null    
-        Log.i("ISPManager", "USB session closed")
-        Log.i("ISPManagerSession", "USB session CLOSED")
+        Log.i(TAG, "USB session closed")
     }
 
     fun sendCMD_GET_DEVICEID( callback: ((ByteArray?, Boolean) -> Unit)) {
 
         val cmd = ISPCommands.CMD_GET_DEVICEID
         val sendBuffer = ISPCommandTool.toCMD(cmd, packetNumber)
-        Log.i("ISPManager", "sendCMD cmd=${cmd} packetNumber=$packetNumber")  
+        Log.i(TAG, "sendCMD cmd=${cmd} packetNumber=$packetNumber")  
         this.write( sendBuffer)
         val expectedPackNo = packetNumber + 1.toUInt()
         val readBuffer = waitForExpectedPacket(expectedPackNo)
@@ -569,7 +569,7 @@ object ISPManager {
         val connection = usbConnection
         val endpoint = readEndpoint    
         if (connection == null || endpoint == null) {    
-            Log.i("ISPManager", "read failed: USB session not open")    
+            Log.i(TAG, "read failed: USB session not open")    
             return null
         }    
         val readBuffer = ByteArray(64)    
@@ -582,7 +582,7 @@ object ISPManager {
             )    
         val readBufferString = HEXTool.toHexString(readBuffer)    
         val display = HEXTool.toDisPlayString(readBufferString)    
-        Log.i("ISPPacket", "i=$i    ,readBuffer:  $display")    
+        Log.i(TAGP, "i=$i    ,readBuffer:  $display")    
         if (i <= 0) {
             return null
         }    
@@ -612,7 +612,7 @@ object ISPManager {
             val readBuffer = this.read()
     
             if (readBuffer == null) {
-                Log.i("ISPManager", "waitForExpectedPacket readBuffer == null")
+                Log.i(TAG, "waitForExpectedPacket readBuffer == null")
                 continue
             }
     
@@ -628,7 +628,7 @@ object ISPManager {
                 val display = HEXTool.toDisPlayString(readBufferString)
 
                 Log.i(
-                    "ISPManager",
+                    TAG,
                     "waitForExpectedPacket " +
                     "resultPackNo=$resultPackNo " +
                     "expectedPackNo=$expectedPackNo " +
@@ -636,7 +636,7 @@ object ISPManager {
                 )  
 
                 Log.i(
-                    "ISPPacket",
+                    TAGP,
                     "Ignoring unexpected packet: $display"
                 )
                 continue
@@ -644,7 +644,7 @@ object ISPManager {
             
             if (zeroPacketCount > 0) {
                 Log.i(
-                    "ISPManager", 
+                    TAG, 
                     "Ignored $zeroPacketCount zero packets while waiting for packNo=$expectedPackNo"
                 )
             }
@@ -653,7 +653,7 @@ object ISPManager {
         }
     
         Log.i(
-            "ISPManager",
+            TAG,
             "waitForExpectedPacket timeout waiting for packNo=$expectedPackNo"
         )    
         return null
@@ -668,7 +668,7 @@ object ISPManager {
         if (connection == null || endpoint == null) {
     
             Log.i(
-                "ISPManager",
+                TAG,
                 "write failed: USB session not open"
             )
     
@@ -692,7 +692,7 @@ object ISPManager {
             )
     
         Log.i(
-            "ISPPacket",
+            TAGP,
             "i=$i, writeBuffer: $display"
         )
     }

@@ -1,8 +1,6 @@
-# HolfuyConfigTool Help
-
 ## Requirements
 
-To use HolfuyConfigTool, you will need:
+To use this tool, you will need:
 
 * An Android phone or tablet with USB OTG (On-The-Go) capability.
 * A [USB OTG adapter](https://www.amazon.com/dp/B09SZ5NHF4?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1&th=1) if your device does not have native USB host capability available through its connector.

@@ -18,6 +18,10 @@ class MainViewModel(
     private val usbDeviceProvider: UsbDeviceProvider
 ) : ViewModel()
 {
+    companion object {
+        private const val TAG = "HolfuyUSB-VM"
+    }
+    
     var uiState by mutableStateOf(MainUiState())
         private set
         
@@ -40,55 +44,61 @@ class MainViewModel(
         
     fun connect()
     {
-
+        Log.i(
+            TAG,
+            "connect() called"
+        )
+        
         viewModelScope.launch {
             val usbDevice = usbDeviceProvider.findDevice()
             
-            Log.d(
-                "HolfuyUSB",
-                if (usbDevice != null)
-                    "Found USB device: ${usbDevice.deviceName}"
-                else
-                    "No USB device found"
-            )
-    
-            uiState = uiState.copy(
-                connecting = true,
-                errorMessage = null
-            )
+            if (usbDevice == null) {
+            
+                Log.e(
+                    TAG,
+                    "Connect requested but no USB device found"
+                )
+            
+                uiState = uiState.copy(
+                    connecting = false,
+                    errorMessage = "No USB device found"
+                )
+            
+                return@launch
+            }
     
             try {
-    
+            
                 val connected = device.connect()
-    
+            
                 if (connected) {
-                
-                    DeviceRepository.setConnected(
-                        true
-                    )
-                
-                    Log.i(
-                        "HolfuyUSB",
-                        "DeviceRepository state=${DeviceRepository.state}"
-                    )
-                
-                    uiState = uiState.copy(
-                        connecting = false
-                    )
+            
+                    DeviceRepository.setConnected(true)
                 }
                 else {
-    
+            
                     uiState = uiState.copy(
-                        connecting = false,
                         errorMessage = "Connection failed"
                     )
                 }
             }
             catch (e: Exception) {
-    
+            
+                Log.e(
+                    TAG,
+                    "Connect failed",
+                    e
+                )
+            
                 uiState = uiState.copy(
                     connecting = false,
                     errorMessage = e.message
+                )
+            }
+            finally {
+            
+                uiState = uiState.copy(
+                    connecting = false
                 )
             }
         }
@@ -99,53 +109,73 @@ class MainViewModel(
         val bytes = firmwareBytes ?: return
     
         viewModelScope.launch(Dispatchers.IO) {
-        
-            DeviceRepository.setUpdateInProgress(
-                true
-            )
-            
-            DeviceRepository.setUpdateProgress(
-                0
-            )
-            
-            Log.i(
-                "HolfuyUSB",
-                "DeviceRepository state=${DeviceRepository.state}"
-            )
-        
-            uiState = uiState.copy(
-                updateCompleted = false
-            )
-            
-            val success =
-                device.updateFirmware(
-                    bytes
-                ) { progress ->
-                
-                    DeviceRepository.setUpdateProgress(
-                        progress
-                    )
-                
-                    Log.i(
-                        "HolfuyUSB",
-                        "Update progress=$progress repository=${DeviceRepository.state}"
-                    )
-                } 
-                
-            DeviceRepository.setUpdateInProgress(
-                false
-            )
-            
-            Log.i(
-                "HolfuyUSB",
-                "DeviceRepository state=${DeviceRepository.state}"
-            )     
-                 
-            uiState = uiState.copy(
-                updateCompleted = success
-            )  
-            
-            Log.i("HolfuyUSB", "updateFirmware success=$success")
+    
+            try {
+    
+                Log.i(
+                    TAG,
+                    "updateFirmware() called"
+                )
+    
+                DeviceRepository.setUpdateInProgress(
+                    true
+                )
+    
+                DeviceRepository.setUpdateProgress(
+                    0
+                )
+    
+                uiState = uiState.copy(
+                    updateCompleted = false
+                )
+    
+                val success =
+                    device.updateFirmware(
+                        bytes
+                    ) { progress ->
+    
+                        DeviceRepository.setUpdateProgress(
+                            progress
+                        )
+    
+                        Log.i(
+                            TAG,
+                            "Update progress=$progress"
+                        )
+                    }
+    
+                uiState = uiState.copy(
+                    updateCompleted = success
+                )
+    
+                Log.i(
+                    TAG,
+                    "updateFirmware success=$success"
+                )
+            }
+            catch (e: Exception) {
+    
+                Log.e(
+                    TAG,
+                    "Firmware update failed",
+                    e
+                )
+    
+                uiState = uiState.copy(
+                    errorMessage = e.message
+                )
+            }
+            finally {
+    
+                DeviceRepository.setUpdateInProgress(
+                    false
+                )
+    
+                Log.i(
+                    TAG,
+                    "DeviceRepository state=${DeviceRepository.state}"
+                )
+            }
         }
     }
 }

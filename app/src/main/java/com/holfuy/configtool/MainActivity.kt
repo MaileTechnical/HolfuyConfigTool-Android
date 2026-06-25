@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.util.Log
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity()
 {
     companion object
     {
-        private const val TAG = "HolfuyUSB"
+        private const val TAG = "HolfuyUSB-A"
     
         private const val ACTION_USB_PERMISSION =
             "com.holfuy.configtool.USB_PERMISSION"
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity()
     
     private lateinit var permissionIntent: PendingIntent 
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var usbManager: UsbManager
     
     private fun getDisplayName(
         contentResolver: ContentResolver,
@@ -111,11 +113,21 @@ class MainActivity : ComponentActivity()
         )
     }
     
-    private fun requestUsbPermission(
-        usbManager: UsbManager,
+    private fun ensureUsbPermission(
         usbDevice: UsbDevice
     )
     {
+        if (usbManager.hasPermission(usbDevice)) {
+    
+            Log.i(
+                TAG,
+                "USB permission already granted"
+            )
+    
+            DeviceRepository.setPermissionGranted(true)
+            return
+        }
+    
         Log.i(
             TAG,
             "Requesting USB permission"
@@ -130,10 +142,17 @@ class MainActivity : ComponentActivity()
     private fun Intent.getSupportedUsbDevice(): UsbDevice?
     {
         val usbDevice =
-            getParcelableExtra(
-                UsbManager.EXTRA_DEVICE,
-                UsbDevice::class.java
-            ) ?: return null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                getParcelableExtra(
+                    UsbManager.EXTRA_DEVICE,
+                    UsbDevice::class.java
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                getParcelableExtra(
+                    UsbManager.EXTRA_DEVICE
+                )
+            } ?: return null
     
         if (!HolfuyUsb.isSupported(usbDevice)) {
     
@@ -158,16 +177,16 @@ class MainActivity : ComponentActivity()
             {
                 Log.i(
                     TAG,
+                    "intent extras=${intent.extras}"
+                )
+                Log.i(
+                    TAG,
                     "usbPermissionReceiver action=${intent.action}"
                 )
     
                 if (intent.action != ACTION_USB_PERMISSION) {
                     return
                 }
-    
-                val usbDevice =
-                    intent.getSupportedUsbDevice()
-                        ?: return
     
                 val granted =
                     intent.getBooleanExtra(
@@ -213,24 +232,8 @@ class MainActivity : ComponentActivity()
                 DeviceRepository.setAttached(
                     true
                 )
-    
-                Log.i(
-                    TAG,
-                    "DeviceRepository state=${DeviceRepository.state}"
-                )
-    
-                val usbManager =
-                    context.getSystemService(
-                        Context.USB_SERVICE
-                    ) as UsbManager
-    
-                if (!usbManager.hasPermission(usbDevice)) {
-    
-                    requestUsbPermission(
-                        usbManager,
-                        usbDevice
-                    )
-                }
+     
+                ensureUsbPermission( usbDevice )
             }
         }
     
@@ -258,11 +261,7 @@ class MainActivity : ComponentActivity()
                 )
     
                 DeviceRepository.clearConnectionState()
-    
-                Log.i(
-                    TAG,
-                    "DeviceRepository state=${DeviceRepository.state}"
-                )
+
             }
         }
     
@@ -271,7 +270,7 @@ class MainActivity : ComponentActivity()
     
         Log.i(
             TAG,
-            "MainActivity onCreate savedInstanceState=${savedInstanceState != null}"
+            "onCreate savedInstanceState=${savedInstanceState != null}"
         )
         
         val config = resources.configuration
@@ -285,27 +284,22 @@ class MainActivity : ComponentActivity()
         
         super.onCreate(savedInstanceState)
         
-        Log.i(
-            TAG,
-            "DeviceRepository state=${DeviceRepository.state}"
-        )
-        
+        usbManager =
+            getSystemService(
+                Context.USB_SERVICE
+            ) as UsbManager
+               
         registerReceivers()
 
         permissionIntent = PendingIntent.getBroadcast(
                 this,
                 0,
                 Intent(ACTION_USB_PERMISSION),
-                PendingIntent.FLAG_IMMUTABLE
+                PendingIntent.FLAG_MUTABLE
         )
 
         setContent {
             HolfuyConfigToolTheme {
-
-                val usbManager =
-                    applicationContext.getSystemService(
-                        Context.USB_SERVICE
-                    ) as UsbManager
                 
                 val usbDeviceProvider = remember {
                     AndroidUsbDeviceProvider(usbManager)
@@ -383,40 +377,7 @@ class MainActivity : ComponentActivity()
                         deviceState = deviceState,
                 
                         onConnectClick = {
-                
-                            val usbDevice =
-                                usbDeviceProvider.findDevice()
-                
-                            if (usbDevice == null) {
-                
-                                Log.i(
-                                    TAG,
-                                    "No USB device found"
-                                )
-                
-                                viewModel.connect()
-                            }
-                            else if (!usbManager.hasPermission(usbDevice)) {
-                
-                                Log.i(
-                                    TAG,
-                                    "Requesting USB permission"
-                                )
-                
-                                usbManager.requestPermission(
-                                    usbDevice,
-                                    permissionIntent
-                                )
-                            }
-                            else {
-                
-                                Log.i(
-                                    TAG,
-                                    "USB permission already granted"
-                                )
-                
-                                viewModel.connect()
-                            }
+                            viewModel.connect()
                         },
                 
                         onSelectFirmwareClick = {
@@ -442,7 +403,7 @@ class MainActivity : ComponentActivity()
 
         Log.i(
             TAG,
-            "MainActivity onDestroy changingConfigurations=$isChangingConfigurations"
+            "onDestroy changingConfigurations=$isChangingConfigurations"
         )
         
         unregisterReceivers()
@@ -456,13 +417,8 @@ class MainActivity : ComponentActivity()
     
         Log.i(
             TAG,
-            "MainActivity onResume"
+            "onResume"
         )
-    
-        val usbManager =
-            getSystemService(
-                Context.USB_SERVICE
-            ) as UsbManager
     
         val usbDevice =
             usbManager.deviceList
@@ -477,11 +433,6 @@ class MainActivity : ComponentActivity()
     
         DeviceRepository.setPermissionGranted(
             permissionGranted
-        )
-    
-        Log.i(
-            TAG,
-            "DeviceRepository state=${DeviceRepository.state}"
         )
     }
     

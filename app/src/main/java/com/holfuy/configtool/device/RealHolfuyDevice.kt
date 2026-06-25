@@ -12,6 +12,11 @@ class RealHolfuyDevice(
     private val usbDeviceProvider: UsbDeviceProvider
 ) : HolfuyDevice
 {
+
+    companion object {
+        private const val TAG = "HolfuyUSB-RHD"
+    }
+    
     override suspend fun connect(): Boolean
     {
         val usbDevice =
@@ -19,7 +24,7 @@ class RealHolfuyDevice(
                 ?: return false
 
         Log.d(
-            "HolfuyUSB",
+            TAG,
             "Using USB device: ${usbDevice.deviceName}"
         )
 
@@ -30,7 +35,7 @@ class RealHolfuyDevice(
             )
         ) {
             Log.e(
-                "HolfuyUSB",
+                TAG,
                 "openUsbSession failed"
             )
             return false
@@ -41,7 +46,7 @@ class RealHolfuyDevice(
 
         if (connectResult.isTimeout) {
             Log.e(
-                "HolfuyUSB",
+                TAG,
                 "CMD_CONNECT timeout"
             )
             return false
@@ -49,7 +54,7 @@ class RealHolfuyDevice(
 
         if (!connectResult.isChecksum) {
             Log.e(
-                "HolfuyUSB",
+                TAG,
                 "CMD_CONNECT checksum failure"
             )
             return false
@@ -60,7 +65,7 @@ class RealHolfuyDevice(
 
         if (!syncResult.isChecksum) {
             Log.e(
-                "HolfuyUSB",
+                TAG,
                 "CMD_SYNC_PACKNO checksum failure"
             )
             return false
@@ -75,7 +80,7 @@ class RealHolfuyDevice(
     ): Boolean    
     {
         Log.i(
-            "HolfuyUSB",
+            TAG,
             "Starting firmware update (${firmwareBytes.size} bytes)"
         )
     
@@ -87,11 +92,6 @@ class RealHolfuyDevice(
             0u
         ) { _, progress ->
         
-            Log.i(
-                "HolfuyUSB",
-                "UPDATE_BIN progress=$progress"
-            )
-        
             onProgress(progress)
         
             if (progress < 0) {
@@ -100,7 +100,7 @@ class RealHolfuyDevice(
         }
     
         Log.i(
-            "HolfuyUSB",
+            TAG,
             "Firmware update finished success=$success"
         )
     
