@@ -292,10 +292,12 @@ class MainActivity : ComponentActivity()
         registerReceivers()
 
         permissionIntent = PendingIntent.getBroadcast(
-                this,
-                0,
-                Intent(ACTION_USB_PERMISSION),
-                PendingIntent.FLAG_MUTABLE
+            this,
+            0,
+            Intent(ACTION_USB_PERMISSION).apply {
+                setPackage(packageName)
+            },
+            PendingIntent.FLAG_MUTABLE
         )
 
         setContent {
