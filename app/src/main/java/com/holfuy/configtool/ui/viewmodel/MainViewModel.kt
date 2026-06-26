@@ -136,12 +136,7 @@ class MainViewModel(
     
                         DeviceRepository.setUpdateProgress(
                             progress
-                        )
-    
-                        Log.i(
-                            TAG,
-                            "Update progress=$progress"
-                        )
+                        )   
                     }
     
                 uiState = uiState.copy(
