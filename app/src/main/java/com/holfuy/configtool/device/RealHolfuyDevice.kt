@@ -19,59 +19,77 @@ class RealHolfuyDevice(
     
     override suspend fun connect(): Boolean
     {
-        val usbDevice =
-            usbDeviceProvider.findDevice()
-                ?: return false
-
-        Log.d(
-            TAG,
-            "Using USB device: ${usbDevice.deviceName}"
-        )
-
-        if (
-            !ISPManager.openUsbSession(
-                usbManager,
-                usbDevice
-            )
-        ) {
-            Log.e(
+        var connectionSucceeded = false
+    
+        try {
+    
+            val usbDevice =
+                usbDeviceProvider.findDevice()
+                    ?: return false
+    
+            Log.d(
                 TAG,
-                "openUsbSession failed"
+                "Using USB device: ${usbDevice.deviceName}"
             )
-            return false
+    
+            if (
+                !ISPManager.openUsbSession(
+                    usbManager,
+                    usbDevice
+                )
+            ) {
+    
+                Log.e(
+                    TAG,
+                    "openUsbSession failed"
+                )
+    
+                return false
+            }
+    
+            val connectResult =
+                ISPManager.suspendCMD_CONNECT()
+    
+            if (connectResult.isTimeout) {
+    
+                Log.e(
+                    TAG,
+                    "CMD_CONNECT timeout"
+                )
+    
+                return false
+            }
+    
+            if (!connectResult.isChecksum) {
+    
+                Log.e(
+                    TAG,
+                    "CMD_CONNECT checksum failure"
+                )
+    
+                return false
+            }
+    
+            val syncResult =
+                ISPManager.suspendCMD_SYNC_PACKNO()
+    
+            if (!syncResult.isChecksum) {
+    
+                Log.e(
+                    TAG,
+                    "CMD_SYNC_PACKNO checksum failure"
+                )
+    
+                return false
+            }
+    
+            connectionSucceeded = true
+            return true
         }
-
-        val connectResult =
-            ISPManager.suspendCMD_CONNECT()
-
-        if (connectResult.isTimeout) {
-            Log.e(
-                TAG,
-                "CMD_CONNECT timeout"
-            )
-            return false
+        finally {
+    
+            DeviceRepository.setConnected(connectionSucceeded)
         }
-
-        if (!connectResult.isChecksum) {
-            Log.e(
-                TAG,
-                "CMD_CONNECT checksum failure"
-            )
-            return false
-        }
-
-        val syncResult =
-            ISPManager.suspendCMD_SYNC_PACKNO()
-
-        if (!syncResult.isChecksum) {
-            Log.e(
-                TAG,
-                "CMD_SYNC_PACKNO checksum failure"
-            )
-            return false
-        }
-
-        return true
     }
    
     override suspend fun updateFirmware(

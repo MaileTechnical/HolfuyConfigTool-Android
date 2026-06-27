@@ -313,8 +313,7 @@ class MainActivity : ComponentActivity()
                 
                 val factory = remember {
                     MainViewModelFactory(
-                        holfuyDevice,
-                        usbDeviceProvider
+                        holfuyDevice
                     )
                 }
 

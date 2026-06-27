@@ -14,8 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val device: HolfuyDevice,
-    private val usbDeviceProvider: UsbDeviceProvider
+    private val holfuyDevice: HolfuyDevice,
 ) : ViewModel()
 {
     companion object {
@@ -44,59 +43,38 @@ class MainViewModel(
         
     fun connect()
     {
-        Log.d(
-            TAG,
-            "connect() called"
-        )
-        
+        Log.d(TAG, "connect() called")
+    
         viewModelScope.launch {
-            val usbDevice = usbDeviceProvider.findDevice()
-            
-            if (usbDevice == null) {
-            
-                Log.e(
-                    TAG,
-                    "Connect requested but no USB device found"
-                )
-            
-                uiState = uiState.copy(
-                    connecting = false,
-                    errorMessage = "No USB device found"
-                )
-            
-                return@launch
-            }
+    
+            uiState = uiState.copy(
+                connecting = true,
+                errorMessage = null
+            )
     
             try {
-            
-                val connected = device.connect()
-            
-                if (connected) {
-            
-                    DeviceRepository.setConnected(true)
-                }
-                else {
-            
+    
+                if (!holfuyDevice.connect()) {
+    
                     uiState = uiState.copy(
                         errorMessage = "Connection failed"
                     )
                 }
             }
             catch (e: Exception) {
-            
+    
                 Log.e(
                     TAG,
                     "Connect failed",
                     e
                 )
-            
+    
                 uiState = uiState.copy(
-                    connecting = false,
                     errorMessage = e.message
                 )
             }
             finally {
-            
+    
                 uiState = uiState.copy(
                     connecting = false
                 )
@@ -130,7 +108,7 @@ class MainViewModel(
                 )
     
                 val success =
-                    device.updateFirmware(
+                    holfuyDevice.updateFirmware(
                         bytes
                     ) { progress ->
     
