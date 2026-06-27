@@ -34,7 +34,6 @@ class MainViewModel(
         firmwareBytes = bytes
     
         uiState = uiState.copy(
-            firmwareFile = fileName,
             firmwareFileName = fileName,
             firmwareSize = bytes.size,
         )

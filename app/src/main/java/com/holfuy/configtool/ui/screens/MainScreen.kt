@@ -99,7 +99,10 @@ fun MainScreen(
             ) {
                   Text("Firmware File")
                   
-                  Text(uiState.firmwareFile)
+                  Text(
+                      uiState.firmwareFileName
+                          ?: "No file selected"
+                  )
                   
                   uiState.firmwareSize?.let {
                       Text("Size: $it bytes")
