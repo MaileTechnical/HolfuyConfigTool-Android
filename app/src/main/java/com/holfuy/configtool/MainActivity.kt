@@ -179,7 +179,7 @@ class MainActivity : ComponentActivity()
                 intent: Intent
             )
             {
-                Log.i(
+                Log.d(
                     TAG,
                     "intent extras=${intent.extras}"
                 )

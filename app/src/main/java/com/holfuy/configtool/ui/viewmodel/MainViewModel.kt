@@ -44,7 +44,7 @@ class MainViewModel(
         
     fun connect()
     {
-        Log.i(
+        Log.d(
             TAG,
             "connect() called"
         )
@@ -112,7 +112,7 @@ class MainViewModel(
     
             try {
     
-                Log.i(
+                Log.d(
                     TAG,
                     "updateFirmware() called"
                 )
