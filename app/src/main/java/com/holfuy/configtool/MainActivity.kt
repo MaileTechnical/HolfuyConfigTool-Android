@@ -274,7 +274,7 @@ class MainActivity : ComponentActivity()
     override fun onCreate(savedInstanceState: Bundle?)
     {
     
-        Log.i(
+        Log.d(
             TAG,
             "onCreate savedInstanceState=${savedInstanceState != null}"
         )          
@@ -400,7 +400,7 @@ class MainActivity : ComponentActivity()
     override fun onDestroy()
     {
 
-        Log.i(
+        Log.d(
             TAG,
             "onDestroy changingConfigurations=$isChangingConfigurations"
         )

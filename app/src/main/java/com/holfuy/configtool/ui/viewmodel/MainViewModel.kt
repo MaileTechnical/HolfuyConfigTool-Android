@@ -166,7 +166,7 @@ class MainViewModel(
                     false
                 )
     
-                Log.i(
+                Log.d(
                     TAG,
                     "DeviceRepository state=${DeviceRepository.state}"
                 )
