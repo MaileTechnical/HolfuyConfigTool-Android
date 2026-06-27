@@ -3,7 +3,6 @@ package com.holfuy.configtool.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.holfuy.configtool.device.HolfuyDevice
-import com.holfuy.configtool.usb.UsbDeviceProvider
 
 class MainViewModelFactory(
     private val holfuyDevice: HolfuyDevice,

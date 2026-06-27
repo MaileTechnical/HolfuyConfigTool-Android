@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.holfuy.configtool.device.DeviceRepository
 import com.holfuy.configtool.device.HolfuyDevice
 import com.holfuy.configtool.ui.state.MainUiState
-import com.holfuy.configtool.usb.UsbDeviceProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
