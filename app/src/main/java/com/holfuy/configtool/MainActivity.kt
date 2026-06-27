@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holfuy.configtool.device.DeviceRepository
+import com.holfuy.configtool.device.HolfuyDevice
 import com.holfuy.configtool.device.RealHolfuyDevice
 import com.holfuy.configtool.ui.screens.HelpScreen
 import com.holfuy.configtool.ui.screens.MainScreen
@@ -33,6 +34,7 @@ import com.holfuy.configtool.ui.viewmodel.MainViewModel
 import com.holfuy.configtool.ui.viewmodel.MainViewModelFactory
 import com.holfuy.configtool.usb.AndroidUsbDeviceProvider
 import com.holfuy.configtool.usb.HolfuyUsb
+import com.holfuy.configtool.usb.UsbDeviceProvider
 
 
 class MainActivity : ComponentActivity()
@@ -48,6 +50,8 @@ class MainActivity : ComponentActivity()
     private lateinit var permissionIntent: PendingIntent 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var usbManager: UsbManager
+    private lateinit var holfuyDevice: HolfuyDevice
+    private lateinit var usbDeviceProvider: UsbDeviceProvider
     
     private fun getDisplayName(
         contentResolver: ContentResolver,
@@ -259,6 +263,8 @@ class MainActivity : ComponentActivity()
                     TAG,
                     "Supported USB device detached"
                 )
+                
+                holfuyDevice.onUsbDetached()
     
                 DeviceRepository.clearConnectionState()
 
@@ -271,23 +277,25 @@ class MainActivity : ComponentActivity()
         Log.i(
             TAG,
             "onCreate savedInstanceState=${savedInstanceState != null}"
-        )
-        
-        val config = resources.configuration
-        
-        Log.i(
-            TAG,
-            "Config keyboard=${config.keyboard} " +
-            "hardKeyboardHidden=${config.hardKeyboardHidden} " +
-            "navigation=${config.navigation}"
-        )
-        
+        )          
+       
         super.onCreate(savedInstanceState)
         
         usbManager =
             getSystemService(
                 Context.USB_SERVICE
             ) as UsbManager
+            
+        usbDeviceProvider =
+            AndroidUsbDeviceProvider(
+                usbManager
+            )
+        
+        holfuyDevice =
+            RealHolfuyDevice(
+                usbManager,
+                usbDeviceProvider
+            )
                
         registerReceivers()
 
@@ -303,20 +311,9 @@ class MainActivity : ComponentActivity()
         setContent {
             HolfuyConfigToolTheme {
                 
-                val usbDeviceProvider = remember {
-                    AndroidUsbDeviceProvider(usbManager)
-                }
-
-                val device = remember {
-                    RealHolfuyDevice(
-                        usbManager,
-                        usbDeviceProvider
-                    )
-                }
-
                 val factory = remember {
                     MainViewModelFactory(
-                        device,
+                        holfuyDevice,
                         usbDeviceProvider
                     )
                 }
@@ -416,11 +413,6 @@ class MainActivity : ComponentActivity()
     override fun onResume()
     {
         super.onResume()
-    
-        Log.i(
-            TAG,
-            "onResume"
-        )
     
         val usbDevice =
             usbManager.deviceList

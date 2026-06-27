@@ -2,12 +2,10 @@
 
 To use this tool, you will need:
 
-* An Android phone or tablet with USB OTG (On-The-Go) capability.
+* An Android phone or tablet with USB OTG (On-The-Go) capability.  OTG enables a phone or tablet to act as a host computer when connected to a weather station.
 * A [USB OTG adapter](https://www.amazon.com/dp/B09SZ5NHF4?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_1&th=1) if your device does not have native USB host capability available through its connector.
 * A USB cable with a Micro-B connector for the Holfuy station and a connector compatible with your Android device (USB-A or USB-C).
-* A firmware file stored on your Android device.
-
-Before starting, copy the firmware file to a location on your Android device that is easy to find, such as the Downloads folder or a folder named "Holfuy".
+* A firmware file stored on your Android device in a convenient location, such as the Downloads folder.
 
 ## Firmware Update Procedure
 
@@ -33,7 +31,7 @@ The station should now be running the new firmware.
 
 Verify that:
 
-* The station is connected through a USB OTG-capable connection.
+* The station is connected through a USB OTG-capable connection.  Some Android devices with native OTG capability require a change in the settings to enable OTG.
 * The station is powered on.
 * The Android USB permission request was accepted.
 
@@ -44,5 +42,3 @@ Verify that:
 * The selected firmware file is intended for your station.
 * The USB cable is securely connected.
 * The station remains connected to the Android device throughout the update process.
-
-If an update fails, leave the station connected and repeat the update procedure.

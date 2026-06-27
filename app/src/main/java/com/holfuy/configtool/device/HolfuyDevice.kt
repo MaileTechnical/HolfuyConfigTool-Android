@@ -8,4 +8,6 @@ interface HolfuyDevice
         firmwareBytes: ByteArray,
         onProgress: (Int) -> Unit
     ): Boolean
+    
+    fun onUsbDetached()
 }

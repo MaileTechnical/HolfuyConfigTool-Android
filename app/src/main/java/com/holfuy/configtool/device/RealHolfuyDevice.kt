@@ -106,4 +106,14 @@ class RealHolfuyDevice(
     
         return success
     }
+    
+    override fun onUsbDetached()
+    {
+        Log.i(
+            TAG,
+            "onUsbDetached()"
+        )
+    
+        ISPManager.closeUsbSession()
+    }
 }
