@@ -32,7 +32,7 @@ fun HelpScreen(
 
     val helpText = remember {
         context.assets
-            .open("help.md")
+            .open("UserGuide.md")
             .bufferedReader()
             .use { it.readText() }
     }
