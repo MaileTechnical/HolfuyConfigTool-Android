@@ -10,6 +10,10 @@ The application communicates directly with the station's built-in Nuvoton ISP
 (In-System Programming) bootloader and allows firmware updates to be performed
 from an Android phone or tablet using a USB OTG connection.
 
+Copyright © 2026 John R. Wolfe
+
+Licensed under the Apache License, Version 2.0. See the LICENSE file for details.
+
 ## Screenshots
 
 | | | |
