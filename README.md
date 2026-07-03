@@ -1,11 +1,28 @@
 # Holfuy Upgrader
 
+![Android](https://img.shields.io/badge/Android-8.0%2B-brightgreen)
+![License](https://img.shields.io/badge/License-Apache%202.0-blue)
+
 Holfuy Upgrader is an Android application for updating the firmware
 of [Holfuy](https://holfuy.com/) weather stations over USB.
 
 The application communicates directly with the station's built-in Nuvoton ISP
 (In-System Programming) bootloader and allows firmware updates to be performed
 from an Android phone or tablet using a USB OTG connection.
+
+<h2>Screenshots</h2>
+
+<p align="center">
+  <img src="docs/screenshots/not_connected.png" width="250" alt="Not connected">
+  <img src="docs/screenshots/ready_to_update.png" width="250" alt="Ready to update">
+  <img src="docs/screenshots/update_complete.png" width="250" alt="Update complete">
+</p>
+
+<p align="center">
+  <b>Not Connected</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Ready to Update</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Update Complete</b>
+</p>
 
 ## Features
 
@@ -51,11 +68,10 @@ bootloader used by Holfuy weather stations.
 The implementation in `protocol/HEXTool.kt`, `protocol/ISPCommands.kt`, and
 `protocol/ISPManager.kt` originated from the
 [`OpenNuvoton/NuISPTool-Android`](https://github.com/OpenNuvoton/NuISPTool-Android)
-project and has been substantially modified
-and extended during development of this application.  The upstream repository
-currently does not include an explicit software license. A request has been
-submitted to Nuvoton to clarify the licensing status, and this project's
-attribution and licensing information will be updated accordingly.
+project and has been substantially modified and extended during development of
+this application.
+
+The upstream project is licensed under the Apache License 2.0.
 
 Special thanks to Holfuy for their assistance during development and testing.
 
