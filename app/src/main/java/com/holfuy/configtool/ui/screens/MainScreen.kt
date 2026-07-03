@@ -16,8 +16,10 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.holfuy.configtool.BuildConfig
 import com.holfuy.configtool.device.DeviceState
 import com.holfuy.configtool.ui.state.MainUiState
 
@@ -156,5 +158,13 @@ fun MainScreen(
         ) {
             Text("Update Firmware")
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = "Version ${BuildConfig.VERSION_NAME}",
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.bodySmall
+        )
     }
 }
