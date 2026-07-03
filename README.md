@@ -10,19 +10,12 @@ The application communicates directly with the station's built-in Nuvoton ISP
 (In-System Programming) bootloader and allows firmware updates to be performed
 from an Android phone or tablet using a USB OTG connection.
 
-<h2>Screenshots</h2>
+## Screenshots
 
-<p align="center">
-  <img src="docs/screenshots/not_connected.png" width="250" alt="Not connected">
-  <img src="docs/screenshots/ready_to_update.png" width="250" alt="Ready to update">
-  <img src="docs/screenshots/update_complete.png" width="250" alt="Update complete">
-</p>
-
-<p align="center">
-  <b>Not Connected</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b>Ready to Update</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b>Update Complete</b>
-</p>
+| | | |
+|:-:|:-:|:-:|
+| <img src="docs/screenshots/not_connected.png" width="250"> | <img src="docs/screenshots/ready_to_update.png" width="250"> | <img src="docs/screenshots/update_complete.png" width="250"> |
+| **Not Connected** | **Ready to Update** | **Update Complete** |
 
 ## Features
 
