@@ -79,11 +79,22 @@ The author reviewed, tested, and integrated all generated code.
 
 Please include the Android version, device model, and application log when reporting problems.
 
-Pull requests should be discussed in an issue before significant new functionality is added.
+
+Pull requests are welcome.
+Please open an issue before beginning work on significant new features or architectural
+changes so that we can discuss the proposed approach.
+
+## Privacy Policy
+
+Holfuy Upgrader does not collect, store, transmit, or share personal information.
+
+For complete details, see [PrivacyPolicy.md](PrivacyPolicy.md).
 
 ## Disclaimer
 
 Firmware updates modify the software stored on the weather station.
+
 Ensure that you are using firmware supplied for your specific Holfuy device.
 
-Use this software at your own risk.
+The authors and contributors are not responsible for damage resulting from
+the installation of incorrect firmware or interruption of the firmware update process.
