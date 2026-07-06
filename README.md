@@ -47,7 +47,7 @@ The project uses the Gradle Wrapper, so no separate Gradle installation is requi
 ## User Guide
 
 Detailed operating instructions are available in the project's
-[User Guide](https://github.com/johnrwolfe/HolfuyConfigTool-Android/blob/master/app/src/main/assets/UserGuide.md).
+[User Guide](app/src/main/assets/UserGuide.md).
 
 The same guide is also included in the application and can be accessed by tapping **Help** on the main screen.
 
