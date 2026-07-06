@@ -79,7 +79,10 @@ The author reviewed, tested, and integrated all generated code.
 
 Please include the Android version, device model, and application log when reporting problems.
 
-Pull requests should be discussed in an issue before significant new functionality is added.
+
+Pull requests are welcome.
+Please open an issue before beginning work on significant new features or architectural
+changes so that we can discuss the proposed approach.
 
 ## Privacy Policy
 
