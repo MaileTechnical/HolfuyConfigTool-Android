@@ -72,6 +72,9 @@ The upstream project is licensed under the Apache License 2.0.
 
 Special thanks to Holfuy for their assistance during development and testing.
 
+Development of this project was substantially assisted by OpenAI ChatGPT (GPT-5.5).
+The author reviewed, tested, and integrated all generated code.
+
 ## Contributing
 
 Please include the Android version, device model, and application log when reporting problems.
