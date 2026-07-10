@@ -13,8 +13,8 @@ To use this tool, you will need:
 2. Disconnect the solar panel from the station main board.
 3. Connect the station to the Android device using the USB cable and OTG adapter if required.
 4. Turn on the station.
-5. When Android requests permission to access the USB device, grant permission.
-6. Tap **Connect**.
+5. Tap **Connect**.
+6. When Android requests permission to access the USB device, grant permission.
 7. Tap **Select Firmware** and browse to the firmware file you want to install.
 8. Tap **Update Firmware**.
 9. Wait for the update to complete. Do not disconnect the Android device from the station during the update process.
