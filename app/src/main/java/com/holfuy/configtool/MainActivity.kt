@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holfuy.configtool.device.DeviceRepository
@@ -356,7 +357,7 @@ class MainActivity : ComponentActivity()
                     
                 val deviceState by viewModel.deviceStateFlow.collectAsState()
                 
-                var showHelp by remember {
+                var showHelp by rememberSaveable {
                     mutableStateOf(false)
                 }
                 
