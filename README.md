@@ -18,8 +18,8 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file for details
 
 | | | |
 |:-:|:-:|:-:|
-| <img src="docs/screenshots/not_connected.png" width="250"> | <img src="docs/screenshots/ready_to_update.png" width="250"> | <img src="docs/screenshots/update_complete.png" width="250"> |
-| **Not Connected** | **Ready to Update** | **Update Complete** |
+| <img src="play-store-assets/screenshots/phone/02-Attached.jpg" width="250"> | <img src="play-store-assets/phone/screenshots/03-USB_PermissionRequest" width="250"> | <img src="play-store-assets/screenshots/phone/05-FirmwareSelected.jpg" width="250"> |
+| **Station Detected** | **USB Permission** | **Ready to Update** |
 
 ## Features
 
