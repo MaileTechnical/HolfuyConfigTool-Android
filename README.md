@@ -51,12 +51,6 @@ Detailed operating instructions are available in the project's
 
 The same guide is also included in the application and can be accessed by tapping **Help** on the main screen.
 
-## Project Status
-
-Current release: **1.0**
-
-This is the initial public release.
-
 ## Acknowledgements
 
 This application communicates with the Nuvoton ISP (In-System Programming)
