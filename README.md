@@ -18,8 +18,8 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file for details
 
 | | | |
 |:-:|:-:|:-:|
-| <img src="docs/screenshots/not_connected.png" width="250"> | <img src="docs/screenshots/ready_to_update.png" width="250"> | <img src="docs/screenshots/update_complete.png" width="250"> |
-| **Not Connected** | **Ready to Update** | **Update Complete** |
+| <img src="play-store-assets/screenshots/phone/02-Attached.jpg" width="250"> | <img src="play-store-assets/screenshots/phone/03-USB_PermissionRequest.jpg" width="250"> | <img src="play-store-assets/screenshots/phone/05-FirmwareSelected.jpg" width="250"> |
+| **Station Detected** | **USB Permission** | **Ready to Update** |
 
 ## Features
 
@@ -50,12 +50,6 @@ Detailed operating instructions are available in the project's
 [User Guide](app/src/main/assets/UserGuide.md).
 
 The same guide is also included in the application and can be accessed by tapping **Help** on the main screen.
-
-## Project Status
-
-Current release: **1.0**
-
-This is the initial public release.
 
 ## Acknowledgements
 
