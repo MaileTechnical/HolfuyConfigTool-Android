@@ -36,13 +36,25 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file for details
 - USB cable with a USB Micro-B connector for the weather station
 - Firmware image supplied by Holfuy
 
-## Building
+## Building a Development APK
 
 This project is built with Android Studio using Kotlin and Jetpack Compose.
-
 Clone the repository and open it with a recent version of Android Studio.
-
 The project uses the Gradle Wrapper, so no separate Gradle installation is required.
+
+## Building a Release Bundle
+
+To build a signed Android App Bundle for Google Play:
+
+```bash
+./gradlew clean bundleRelease
+```
+
+The bundle will be written to:
+
+```
+app/build/outputs/bundle/release/
+```
 
 ## User Guide
 
