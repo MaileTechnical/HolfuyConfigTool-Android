@@ -18,7 +18,7 @@ Licensed under the Apache License, Version 2.0. See the LICENSE file for details
 
 | | | |
 |:-:|:-:|:-:|
-| <img src="play-store-assets/screenshots/phone/02-Attached.jpg" width="250"> | <img src="play-store-assets/phone/screenshots/03-USB_PermissionRequest.jpg" width="250"> | <img src="play-store-assets/screenshots/phone/05-FirmwareSelected.jpg" width="250"> |
+| <img src="play-store-assets/screenshots/phone/02-Attached.jpg" width="250"> | <img src="play-store-assets/screenshots/phone/03-USB_PermissionRequest.jpg" width="250"> | <img src="play-store-assets/screenshots/phone/05-FirmwareSelected.jpg" width="250"> |
 | **Station Detected** | **USB Permission** | **Ready to Update** |
 
 ## Features
