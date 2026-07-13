@@ -1,0 +1,6 @@
+Initial public release of Holfuy Upgrader.
+
+• Update Holfuy weather station firmware over USB using an Android device
+• Guided firmware update workflow
+• Built-in User's Guide with setup instructions and troubleshooting tips
+• Tested on Android 8.1, 12, 15, and 16
