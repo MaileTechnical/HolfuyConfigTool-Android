@@ -3,11 +3,13 @@
 This document records the relationship between Git releases and Google Play
 releases.
 
-`versionName` is the user-visible application version.
+`versionName` is the user-visible application version and may be associated
+with many different `versionCode` values.
 
 `versionCode` is the monotonically increasing build number required by
 Google Play. Once a versionCode has been uploaded to Google Play, it cannot
-be reused for another uploaded bundle.
+be reused for another uploaded bundle of any kind, regardless of the Google
+Play track involved.
 
 | versionCode | versionName | Git Tag | Play Track | Date | Notes |
 |------------:|-------------|---------|------------|------|-------|
@@ -16,12 +18,6 @@ be reused for another uploaded bundle.
 | 3 | 1.0.0 | v1.0.0 | Production | 2026-07-__ | Initial public release. |
 
 ## Notes
-
-- `versionCode` is incremented for every Android App Bundle uploaded to
-  Google Play, regardless of whether the release is internal, closed,
-  open, or production.
-
-- Multiple `versionCode` values may correspond to the same `versionName`.
 
 - Git tags identify the exact source code used to build each release.
 
