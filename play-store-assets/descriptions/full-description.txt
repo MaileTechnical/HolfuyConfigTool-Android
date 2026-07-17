@@ -1,0 +1,24 @@
+Holfuy Upgrader is an Android application for updating the firmware of compatible Holfuy weather stations over a USB connection.
+
+The application communicates directly with the station's built-in Nuvoton ISP (In-System Programming) bootloader, allowing firmware supplied by Holfuy to be installed from an Android phone or tablet.
+
+Features
+
+• Firmware updates over USB
+• Simple, straightforward user interface
+• Automatic detection of supported Holfuy weather stations
+• Compatible with Android 8.0 (API 26) and later
+• Open-source software
+
+Requirements
+
+• Android device with USB OTG support
+• USB OTG adapter (if required by your device)
+• USB cable with a USB Micro-B connector for the weather station
+• Firmware image supplied by Holfuy
+
+Holfuy Upgrader does not collect personal information, display advertising, or require a user account. All communication occurs locally between your Android device and the connected weather station.
+
+Source code, documentation, and the Privacy Policy are available at:
+
+https://github.com/MaileTechnical/HolfuyConfigTool-Android

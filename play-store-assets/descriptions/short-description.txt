@@ -1,0 +1,1 @@
+Update Holfuy weather station firmware from your Android device via USB.
