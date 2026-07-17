@@ -69,19 +69,31 @@ The repository maintains:
    - CHANGELOG
    - Release History
    - Google Play assets, as required
-4. Execute the release test plan on a release APK built from the release branch.
-5. Build a signed Android App Bundle:
+4. Build release APK from the release branch:
+
+   ```bash
+   ./gradlew clean assembleRelease
+   ```
+   
+5. Install release APK:
+
+   ```bash
+   adb install -r app/build/outputs/apk/release/app-release.apk
+   ```
+   
+6. Execute the release test plan on the release APK.
+7. Build a signed Android App Bundle:
 
    ```bash
    ./gradlew clean bundleRelease
    ```
 
-6. Create a Git tag (e.g., v1.0.0-rc1, v1.0.0, etc.) annotating it with `versionCode` and Play track.
-7. Upload the bundle to the Google Play Console.
-8. Upload updated Play Store assets, screenshots, and "What's New" text if necessary.
-9. Submit the release for review by Play.
-10. After approval from Play, install the app from the appropriate Play testing track and perform a brief acceptance test.
-11. Promote the release to the next Play track if appropriate.
+8. Create a Git tag (e.g., v1.0.0-rc1, v1.0.0, etc.) annotating it with `versionCode` and Play track.
+9. Upload the bundle to the Google Play Console.
+10. Upload updated Play Store assets, screenshots, and "What's New" text if necessary.
+11. Submit the release for review by Play.
+12. After approval from Play, install the app from the appropriate Play testing track and perform a brief acceptance test.
+13. Promote the release to the next Play track if appropriate.
 
 ## Guiding Principles
 
