@@ -149,4 +149,11 @@ class MainViewModel(
             }
         }
     }
+    
+    fun clearTransientStatus()
+    {
+        uiState = uiState.copy(
+            updateCompleted = false
+        )
+    }
 }

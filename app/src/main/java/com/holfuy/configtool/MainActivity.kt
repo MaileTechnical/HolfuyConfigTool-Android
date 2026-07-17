@@ -318,7 +318,8 @@ class MainActivity : ComponentActivity()
                 holfuyDevice.onUsbDetached()
     
                 DeviceRepository.clearConnectionState()
-
+                
+                activityViewModel.clearTransientStatus()
             }
         }
     
@@ -431,7 +432,8 @@ class MainActivity : ComponentActivity()
                             ::connectOrRequestPermission,
                 
                         onSelectFirmwareClick = {
-                
+                        
+                            activityViewModel.clearTransientStatus()                
                             firmwarePicker.launch("*/*")
                 
                         },
