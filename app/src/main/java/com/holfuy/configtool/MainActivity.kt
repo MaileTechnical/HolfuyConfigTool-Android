@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.holfuy.configtool.device.DeviceRepository
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity()
     }
     
     private lateinit var permissionIntent: PendingIntent 
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var activityViewModel: MainViewModel
     private lateinit var usbManager: UsbManager
     private lateinit var holfuyDevice: HolfuyDevice
     private lateinit var usbDeviceProvider: UsbDeviceProvider
@@ -117,10 +118,57 @@ class MainActivity : ComponentActivity()
         )
     }
     
-    private fun ensureUsbPermission(
-        usbDevice: UsbDevice
-    )
+    // USB permission acquisition is intentionally initiated by the Connect 
+    // action rather than by the attach broadcast. This provides a consistent 
+    // workflow regardless of whether the app is already running when the station 
+    // is attached, whether the permission dialog was previously dismissed, or 
+    // how individual Android versions deliver USB lifecycle events.    
+    private fun connectOrRequestPermission()
     {
+        if (ensureUsbPermission()) {
+    
+            activityViewModel.connect()
+        }
+    }
+    
+    private fun findSupportedUsbDevice(): UsbDevice?
+    {
+        return usbManager.deviceList
+            .values
+            .firstOrNull {
+                HolfuyUsb.isSupported(it)
+            }
+    }
+    
+    private fun refreshUsbState()
+    {
+        val usbDevice =
+            findSupportedUsbDevice()
+    
+        DeviceRepository.setAttached(
+            usbDevice != null
+        )
+    
+        DeviceRepository.setPermissionGranted(
+            usbDevice?.let {
+                usbManager.hasPermission(it)
+            } ?: false
+        )
+    
+        if (usbDevice == null) {
+            DeviceRepository.clearConnectionState()
+        }
+    }
+    
+    // true = permission already granted
+    // false = permission not granted yet but has been requested 
+    //         if a supported device is attached
+    private fun ensureUsbPermission(): Boolean
+    {
+        val usbDevice =
+            findSupportedUsbDevice()
+                ?: return false
+    
         if (usbManager.hasPermission(usbDevice)) {
     
             Log.i(
@@ -129,7 +177,8 @@ class MainActivity : ComponentActivity()
             )
     
             DeviceRepository.setPermissionGranted(true)
-            return
+    
+            return true
         }
     
         Log.i(
@@ -141,6 +190,8 @@ class MainActivity : ComponentActivity()
             usbDevice,
             permissionIntent
         )
+    
+        return false
     }
     
     private fun Intent.getSupportedUsbDevice(): UsbDevice?
@@ -206,6 +257,11 @@ class MainActivity : ComponentActivity()
                 DeviceRepository.setPermissionGranted(
                     granted
                 )
+                
+                if (granted) {
+                
+                    activityViewModel.connect()
+                }
             }
         }
         
@@ -224,20 +280,15 @@ class MainActivity : ComponentActivity()
                     return
                 }
     
-                val usbDevice =
-                    intent.getSupportedUsbDevice()
-                        ?: return
+                intent.getSupportedUsbDevice()
+                    ?: return
     
                 Log.i(
                     TAG,
                     "Supported USB device attached"
                 )
     
-                DeviceRepository.setAttached(
-                    true
-                )
-     
-                ensureUsbPermission( usbDevice )
+                refreshUsbState()
             }
         }
     
@@ -267,7 +318,8 @@ class MainActivity : ComponentActivity()
                 holfuyDevice.onUsbDetached()
     
                 DeviceRepository.clearConnectionState()
-
+                
+                activityViewModel.clearTransientStatus()
             }
         }
     
@@ -307,6 +359,8 @@ class MainActivity : ComponentActivity()
             },
             PendingIntent.FLAG_MUTABLE
         )
+        
+        refreshUsbState()
 
         setContent {
             HolfuyConfigToolTheme {
@@ -320,7 +374,7 @@ class MainActivity : ComponentActivity()
                 val viewModel: MainViewModel = viewModel(
                     factory = factory
                 )
-                mainViewModel = viewModel
+                activityViewModel = viewModel
                 
                 val firmwarePicker =
                     rememberLauncherForActivityResult(
@@ -356,7 +410,7 @@ class MainActivity : ComponentActivity()
                     
                 val deviceState by viewModel.deviceStateFlow.collectAsState()
                 
-                var showHelp by remember {
+                var showHelp by rememberSaveable {
                     mutableStateOf(false)
                 }
                 
@@ -374,12 +428,12 @@ class MainActivity : ComponentActivity()
                         uiState = viewModel.uiState,
                         deviceState = deviceState,
                 
-                        onConnectClick = {
-                            viewModel.connect()
-                        },
+                        onConnectClick =
+                            ::connectOrRequestPermission,
                 
                         onSelectFirmwareClick = {
-                
+                        
+                            activityViewModel.clearTransientStatus()                
                             firmwarePicker.launch("*/*")
                 
                         },
@@ -413,19 +467,11 @@ class MainActivity : ComponentActivity()
     {
         super.onResume()
     
-        val usbDevice =
-            usbManager.deviceList
-                .values
-                .firstOrNull()
+        refreshUsbState()
     
-        val permissionGranted =
-            usbDevice != null &&
-            usbManager.hasPermission(
-                usbDevice
-            )
-    
-        DeviceRepository.setPermissionGranted(
-            permissionGranted
+        Log.i(
+            TAG,
+            "onResume attached=${DeviceRepository.stateFlow.value.attached} permissionGranted=${DeviceRepository.stateFlow.value.permissionGranted}"
         )
     }
     

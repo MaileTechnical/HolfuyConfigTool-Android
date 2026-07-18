@@ -60,7 +60,6 @@ fun MainScreen(
         Button(
             enabled = 
                 deviceState.attached &&
-                deviceState.permissionGranted &&
                 !deviceState.connected &&
                 !deviceState.updateInProgress,
             onClick = onConnectClick
