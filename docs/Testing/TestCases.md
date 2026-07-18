@@ -34,7 +34,7 @@ Each test case consists of the following sections.
 
 **Preconditions**
 
-- Supported Android device
+- Supported Android device with USB Debugging disabled
 - Holfuy weather station
 - USB OTG connection available
 - Known-good firmware image available
@@ -219,11 +219,31 @@ Expected behavioral property:
 
 ---
 
+### VS-HELP
+
+- Tap **Help**.
+- Scroll Help screen.
+- Tap **Close Help**.
+- Tap **Help**.
+- Rotate device.
+- Tap **Back**.
+
+Expected behavioral property:
+
+* Help screen is displayed, scrolls, and responds appropriately to rotation.
+* **Back** and **Close Help** both close Help screen and return to Main screen. 
+
+---
+
 # TC-001 — Update Firmware (Nominal)
 
 **Reference Workflow:** WF-001
 
 **Classification:** Smoke, Regression, Compatibility
+
+**Preconditions**
+
+- Application Session: Fresh and Persistent
 
 ---
 
@@ -327,7 +347,7 @@ Each test case below specifies expected results in addition to these:
 
 **Reference Workflow:** WF-001
 
-**Classification:** Regression, Compatibility
+**Classification:** Regression
 
 **Preconditions**
 
@@ -402,6 +422,10 @@ Each test case below specifies expected results in addition to these:
 
 **Classification:** Smoke, Regression, Compatibility
 
+**Preconditions**
+
+- Application Session: Fresh and Persistent
+
 ---
 
 ## TC-012 — Unexpected Station Loss Before Firmware Update
@@ -436,3 +460,47 @@ Each test case below specifies expected results in addition to these:
 - Application resumes in a consistent state following representative Android lifecycle events.
 - Canceling the document picker leaves the previously selected firmware selection unchanged.
 - Selecting a firmware file returns to the application and enables firmware update as expected.
+
+---
+
+## TC-014 — Clear Status Message When Station Detaches
+
+**Reference Workflow:** WF-001
+
+**Classification:** Regression
+
+**Variation:** IP-7: VS-STATION-LOST
+
+**Expected Results**
+
+- Android reports USB device removal.
+- Application indicates that the station is no longer connected.
+- "Firmware update complete" message is not present on the main screen.
+
+---
+
+## TC-015 — Clear Status Message When Firmware Selection Begins
+
+**Reference Workflow:** WF-001
+
+**Classification:** Regression
+
+**Variation:** IP-7: VS-FW-REPLACE
+
+**Expected Results**
+
+- "Firmware update complete" message is not present on the main screen.
+
+---
+
+## TC-016 — Help Screen
+
+**Reference Workflow:** WF-001
+
+**Classification:** Regression, Compatibility
+
+**Variation:** IP-1, 3, 5, 6, 7: VS-HELP
+
+**Expected Results**
+
+- Application satisfies the VS-HELP expected behavioral property.

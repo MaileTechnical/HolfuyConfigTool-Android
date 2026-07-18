@@ -87,6 +87,7 @@ Representative actions:
 **Rationale**
 
 Interruption points are grouped according to which component owns the active user interface.
+This grouping avoids redundant testing while ensuring that each distinct lifecycle owner is exercised.
 When Holfuy Upgrader owns the UI (IPs 1, 3, 5, 6, and 7), Android lifecycle events are handled
 uniformly by the application and are therefore covered by TC-009.
 
@@ -126,3 +127,11 @@ externally managed UI with distinct lifecycle and navigation behavior, requiring
 | Interruption Point | IP-1 | IP-2 | IP-3 | IP-4 | IP-5 | IP-6 | IP-7 |
 |--------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | Coverage | TC-007 | N | N | N | N | N | N |
+
+---
+
+## Help
+
+| Interruption Point | IP-1 | IP-2 | IP-3 | IP-4 | IP-5 | IP-6 | IP-7 |
+|--------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Coverage | TC-016 | N | =TC-016 | N | =TC-016 | =TC-016 | =TC-016 |

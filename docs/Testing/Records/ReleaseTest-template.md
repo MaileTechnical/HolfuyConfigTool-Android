@@ -14,6 +14,8 @@
 
 ## Test Devices
 
+- After installing app to be tested, turn off USB Debugging and disable Developer Mode
+
 | Device                | Android Version | Result | Notes |
 | --------------------- | --------------- | ------ | ----- |
 | Samsung Galaxy S21    | 15              |        |       |
@@ -35,21 +37,24 @@
 
 # Test Results
 
-| Test Case |     Result    | Notes |
-| --------- | :-----------: | ----- |
-| TC-001    | ☐ Pass ☐ Fail |       |
-| TC-002    | ☐ Pass ☐ Fail |       |
-| TC-003    | ☐ Pass ☐ Fail |       |
-| TC-004    | ☐ Pass ☐ Fail |       |
-| TC-005    | ☐ Pass ☐ Fail |       |
-| TC-006    | ☐ Pass ☐ Fail |       |
-| TC-007    | ☐ Pass ☐ Fail |       |
-| TC-008    | ☐ Pass ☐ Fail |       |
-| TC-009    | ☐ Pass ☐ Fail |       |
-| TC-010    | ☐ Pass ☐ Fail |       |
-| TC-011    | ☐ Pass ☐ Fail |       |
-| TC-012    | ☐ Pass ☐ Fail |       |
-| TC-013    | ☐ Pass ☐ Fail |       |
+| Test Case | Result | Notes |
+| --------- | ------ | ----- |
+| TC-001    |        |       |
+| TC-002    |        |       |
+| TC-003    |        |       |
+| TC-004    |        |       |
+| TC-005    |        |       |
+| TC-006    |        |       |
+| TC-007    |        |       |
+| TC-008    |        |       |
+| TC-009    |        |       |
+| TC-010    |        |       |
+| TC-011    |        |       |
+| TC-012    |        |       |
+| TC-013    |        |       |
+| TC-014    |        |       |
+| TC-015    |        |       |
+| TC-016    |        |       |
 
 ---
 
@@ -66,34 +71,17 @@
 
 # Issues Found
 
-| ID | Severity | Description | Resolution |
-| -- | -------- | ----------- | ---------- |
-
----
-
-# Release Assessment
-
-## Smoke Tests
-
-☐ Passed
-
-## Regression Tests
-
-☐ Passed
-
-## Compatibility Tests
-
-☐ Passed
+- None
 
 ---
 
 # Release Decision
 
-☐ Approved for Release
+Approved for release
 
-☐ Approved with Known Issues
+Approved with known issues:
 
-☐ Release Blocked
+Release blocked
 
 ---
 
