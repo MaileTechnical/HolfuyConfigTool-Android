@@ -706,7 +706,7 @@ Verify that failure to retrieve the firmware repository manifest does not make a
 
 **Reference Workflow:** WF-001
 
-**Classification:** Regression
+**Classification:** Regression, Compatibility
 
 **Variations:** VS-REPO-CURRENT, VS-REPO-OUTDATED, VS-REPO-MISSING, VS-REPO-CUSTOM
 
@@ -852,7 +852,7 @@ or **Outdated**.
 
 **Reference Workflow:** WF-001
 
-**Classification:** Regression
+**Classification:** Regression, Compatibility
 
 **Variation:** VS-REPO-OUTDATED, VS-REPO-CURRENT
 
