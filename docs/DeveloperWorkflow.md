@@ -89,15 +89,15 @@ The repository maintains:
    ```bash
    ./gradlew clean assembleDebug
    ```
-7. Build release APK from the upstream master:
-   ```bash
-   ./gradlew clean assembleRelease
-   ```
-8. Install the debug APK:
+7. Install the debug APK:
    ```bash
    adb install -r app/build/outputs/apk/debug/app-debug.apk
    ```
-9. Execute all test cases that require an override of the manifest URL.
+8. Execute all test cases that require an override of the manifest URL.
+9. Build release APK from the upstream master:
+   ```bash
+   ./gradlew clean assembleRelease
+   ```
 10. Install release APK:
    ```bash
    adb install -r app/build/outputs/apk/release/app-release.apk
