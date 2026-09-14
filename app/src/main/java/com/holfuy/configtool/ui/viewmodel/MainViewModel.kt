@@ -3,9 +3,6 @@ package com.holfuy.configtool.ui.viewmodel
 import android.app.Application
 import android.net.Uri
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.holfuy.configtool.device.DeviceRepository
@@ -22,6 +19,9 @@ import com.holfuy.configtool.ui.state.MainUiState
 import com.holfuy.configtool.ui.state.SelectedFirmware
 import com.holfuy.configtool.usb.UsbDeviceProvider
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -43,8 +43,11 @@ class MainViewModel(
             "Holfuy Support."
     }
 
-    var uiState by mutableStateOf(MainUiState())
-        private set
+    private val _uiState =
+        MutableStateFlow(MainUiState())
+
+    val uiState =
+        _uiState.asStateFlow()
 
     val deviceStateFlow = DeviceRepository.stateFlow
 
@@ -83,8 +86,8 @@ class MainViewModel(
             }
                 ?: return
 
-        uiState =
-            uiState.copy(
+        _uiState.update {
+            it.copy(
                 selectedFirmware =
                     SelectedFirmware(
                         file = file,
@@ -94,6 +97,7 @@ class MainViewModel(
                 selectedFirmwareAvailable =
                     file.exists()
             )
+        }
     }
 
     fun configureRepository(
@@ -143,29 +147,35 @@ class MainViewModel(
     private fun refreshSelectedFirmwareAvailability()
     {
         val selected =
-            uiState.selectedFirmware
+            _uiState.value.selectedFirmware
                 ?: return
 
-        uiState = uiState.copy(
-            selectedFirmwareAvailable =
-                selected.file.exists()
-        )
+        _uiState.update {
+            it.copy(
+                selectedFirmwareAvailable =
+                    selected.file.exists()
+            )
+        }
     }
 
     fun setFirmwareSelectionError(
         message: String
     )
     {
-        uiState = uiState.copy(
-            firmwareSelectionError = message
-        )
+        _uiState.update {
+            it.copy(
+                firmwareSelectionError = message
+            )
+        }
     }
 
     fun clearFirmwareSelectionError()
     {
-        uiState = uiState.copy(
-            firmwareSelectionError = null
-        )
+        _uiState.update {
+            it.copy(
+                firmwareSelectionError = null
+            )
+        }
     }
 
     fun setFirmware(
@@ -191,16 +201,18 @@ class MainViewModel(
             )
         )
 
-        uiState = uiState.copy(
-            selectedFirmware =
-                SelectedFirmware(
-                    file = file,
-                    source = source,
-                    modem = modem
-                ),
-            selectedFirmwareAvailable =
-                file.exists()
-        )
+        _uiState.update {
+            it.copy(
+                selectedFirmware =
+                    SelectedFirmware(
+                        file = file,
+                        source = source,
+                        modem = modem
+                    ),
+                selectedFirmwareAvailable =
+                    file.exists()
+            )
+        }
     }
 
     fun refreshUsbState()
@@ -250,11 +262,13 @@ class MainViewModel(
         if (updateInProgress) {
             diagnosticLogger.recordFirmwareUpdateInterrupted()
 
-            uiState = uiState.copy(
-                updateCompleted = false,
-                firmwareUpdateError =
-                    FIRMWARE_UPDATE_FAILURE_MESSAGE
-            )
+            _uiState.update {
+                it.copy(
+                    updateCompleted = false,
+                    firmwareUpdateError =
+                        FIRMWARE_UPDATE_FAILURE_MESSAGE
+                )
+            }
         }
 
         DeviceRepository.clearConnectionState()
@@ -266,51 +280,54 @@ class MainViewModel(
 
     fun connect()
     {
-        Log.d(
-            TAG,
-            "connect() called"
-        )
-
         diagnosticLogger.recordConnectRequested()
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            uiState = uiState.copy(
-                connecting = true,
-                connectionError = null
-            )
+            _uiState.update {
+                it.copy(
+                    connecting = true,
+                    connectionError = null
+                )
+            }
 
             try {
 
-                if (!holfuyDevice.connect()) {
+                val success =
+                    holfuyDevice.connect()
 
-                    uiState = uiState.copy(
-                        connectionError = "Connection failed"
-                    )
+                if (!success) {
+                    _uiState.update {
+                        it.copy(
+                            connectionError =
+                                "Unable to connect to Holfuy station."
+                        )
+                    }
                 }
-            }
-            catch (e: Exception) {
+
+            } catch (e: Exception) {
 
                 Log.e(
                     TAG,
-                    "Connect failed",
+                    "connect(): exception from holfuyDevice.connect()",
                     e
                 )
 
-                diagnosticLogger.recordUnexpectedException(
-                    "connect",
-                    e
-                )
+                _uiState.update {
+                    it.copy(
+                        connectionError =
+                            e.message
+                                ?: "Unable to connect to Holfuy station."
+                    )
+                }
 
-                uiState = uiState.copy(
-                    connectionError = "Connection failed"
-                )
-            }
-            finally {
+            } finally {
 
-                uiState = uiState.copy(
-                    connecting = false
-                )
+                _uiState.update {
+                    it.copy(
+                        connecting = false
+                    )
+                }
             }
         }
     }
@@ -318,7 +335,7 @@ class MainViewModel(
     fun updateFirmware()
     {
         val selectedFirmware =
-            uiState.selectedFirmware
+            _uiState.value.selectedFirmware
                 ?: return
 
         val firmware =
@@ -345,10 +362,12 @@ class MainViewModel(
                     0
                 )
 
-                uiState = uiState.copy(
-                    updateCompleted = false,
-                    firmwareUpdateError = null
-                )
+                _uiState.update {
+                    it.copy(
+                        updateCompleted = false,
+                        firmwareUpdateError = null
+                    )
+                }
 
                 val bytes =
                     try {
@@ -376,11 +395,13 @@ class MainViewModel(
                             firmware.name
                         )
 
-                        uiState = uiState.copy(
-                            firmwareUpdateError =
-                                "Unable to open the selected " +
-                                    "firmware file."
-                        )
+                        _uiState.update {
+                            it.copy(
+                                firmwareUpdateError =
+                                    "Unable to open the selected " +
+                                        "firmware file."
+                            )
+                        }
 
                         return@launch
                     }
@@ -406,12 +427,16 @@ class MainViewModel(
                         )
                     }
 
-                uiState = uiState.copy(
-                    updateCompleted = success,
-                    firmwareUpdateError =
-                        if (success) null
-                        else FIRMWARE_UPDATE_FAILURE_MESSAGE
-                )
+                _uiState.update {
+                    it.copy(
+                        updateCompleted = success,
+                        firmwareUpdateError =
+                            if (success)
+                                null
+                            else
+                                FIRMWARE_UPDATE_FAILURE_MESSAGE
+                    )
+                }
 
                 Log.i(
                     TAG,
@@ -432,11 +457,13 @@ class MainViewModel(
                     e
                 )
 
-                uiState = uiState.copy(
-                    updateCompleted = false,
-                    firmwareUpdateError =
-                        FIRMWARE_UPDATE_FAILURE_MESSAGE
-                )
+                _uiState.update {
+                    it.copy(
+                        updateCompleted = false,
+                        firmwareUpdateError =
+                            FIRMWARE_UPDATE_FAILURE_MESSAGE
+                    )
+                }
             }
             finally {
 
@@ -455,8 +482,10 @@ class MainViewModel(
 
     fun clearTransientStatus()
     {
-        uiState = uiState.copy(
-            updateCompleted = false
-        )
+        _uiState.update {
+            it.copy(
+                updateCompleted = false
+            )
+        }
     }
 }

@@ -630,6 +630,10 @@ class MainActivity : ComponentActivity()
                     viewModel.deviceStateFlow
                         .collectAsState()
 
+                val uiState by
+                    viewModel.uiState
+                        .collectAsState()
+
                 if (
                     viewModel.repositoryStatus.configuring
                 ) {
@@ -665,19 +669,16 @@ class MainActivity : ComponentActivity()
                             viewModel.repositoryStatus,
 
                         selectedFirmware =
-                            viewModel
-                                .uiState
+                            uiState
                                 .selectedFirmware
                                 ?.file,
 
                         firmwareSelectionError =
-                            viewModel
-                                .uiState
+                            uiState
                                 .firmwareSelectionError,
 
                         selectedFirmwareSource =
-                            viewModel
-                                .uiState
+                            uiState
                                 .selectedFirmware
                                 ?.source,
 
@@ -709,7 +710,7 @@ class MainActivity : ComponentActivity()
 
                     MainScreen(
                         uiState =
-                            viewModel.uiState,
+                            uiState,
 
                         deviceState =
                             deviceState,
