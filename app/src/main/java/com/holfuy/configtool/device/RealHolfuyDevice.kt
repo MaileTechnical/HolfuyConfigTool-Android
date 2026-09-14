@@ -15,6 +15,10 @@ class RealHolfuyDevice(
     private val diagnosticLogger: DiagnosticLogger
 ) : HolfuyDevice {
 
+    companion object {
+        private const val TAG = "HolfuyUSB-D"
+    }
+
     private val operationMutex = Mutex()
     private val sessionLock = Any()
     private var sessionGeneration = 0L
@@ -246,9 +250,5 @@ class RealHolfuyDevice(
         }
 
         ISPManager.closeUsbSession()
-    }
-
-    companion object {
-        private const val TAG = "HolfuyDevice"
     }
 }
