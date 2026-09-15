@@ -1021,7 +1021,16 @@ The `SizeExtension` test fixture contains:
 17. Tap **Browse** again.
 18. Navigate to the test files and select `wrong_extension_too_large.txt`.
 19. Verify that the application rejects the file and displays the error message indicating that the file is both too large and has an invalid extension.
-
+20. Select a valid firmware file within the repository.
+21. Tap **Select Firmware**.
+22. Verify that no error message is displayed on the Select Firmware screen.
+23. Tap **Browse**.
+24. Navigate to the test files and select `too_small.bin`.
+25. Verify that the application rejects the file and displays the error message indicating that the file is too small.
+26. Tap **Browse**.
+27. Navigate to the test files and select `valid_exactly_200kB.bin`.
+28. Tap **Select Firmware**.
+29. Verify that no error message is displayed on the Select Firmware screen.
 
 ### Expected Results
 

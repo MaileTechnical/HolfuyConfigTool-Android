@@ -190,7 +190,7 @@ class MainViewModel(
             size = file.size,
             source = source.name
         )
-
+    
         firmwareSelectionStore.setSelection(
             StoredFirmwareSelection(
                 source = source,
@@ -200,7 +200,7 @@ class MainViewModel(
                 uri = uri
             )
         )
-
+    
         _uiState.update {
             it.copy(
                 selectedFirmware =
@@ -484,7 +484,8 @@ class MainViewModel(
     {
         _uiState.update {
             it.copy(
-                updateCompleted = false
+                updateCompleted = false,
+                firmwareSelectionError = null
             )
         }
     }
