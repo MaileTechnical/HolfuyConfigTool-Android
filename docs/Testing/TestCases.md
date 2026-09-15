@@ -902,18 +902,6 @@ adb push \
   /sdcard/Download/HolfuyTest-Replacement/
 ```
 
-Verify the initial file:
-
-```bash
-adb shell sha256sum /sdcard/Download/HolfuyTest-Replacement/replacement.bin
-```
-
-The initial SHA-256 should be:
-
-```text
-73907bd77f938f6b1446954d4f3363993455c9d19b337720c9c42c23700b6ae5
-```
-
 **Manifest URL override:**
 
 From the project repository root:
