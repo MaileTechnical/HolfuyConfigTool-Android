@@ -902,6 +902,17 @@ adb push \
   /sdcard/Download/HolfuyTest-Replacement/
 ```
 
+Verify the correct file is in the repository:
+```bash
+adb shell sha256sum /sdcard/Download/HolfuyTest-Replacement/replacement.bin
+```
+
+Expected SHA-256:
+
+```text
+fdeab9acf3710362bd2658cdc9a29e8f9c757fcf9811603a8c447cd1d9151108
+```
+
 **Manifest URL override:**
 
 From the project repository root:
