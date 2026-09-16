@@ -41,29 +41,30 @@
 
 | Test Case | Result | Notes |
 | --------- | ------ | ----- |
-| TC-001    |        |       |
-| TC-002    |        |       |
-| TC-003    |        |       |
-| TC-004    |        |       |
-| TC-005    |        |       |
-| TC-006    |        |       |
-| TC-007    |        |       |
+| TC-001    |  Pass  |       |
+| TC-002    |  Pass  |       |
+| TC-003    |  Pass  |       |
+| TC-004    |  Pass  |       |
+| TC-005    |  Pass  |       |
+| TC-006    |  Pass  |       |
+| TC-007    |  Pass  |       |
 | TC-008    |        |       |
 | TC-009    |        |       |
-| TC-010    |        |       |
-| TC-011    |        |       |
+| TC-010    |  Hist  |       |
+| TC-011    |  Hist  |       |
 | TC-012    |        |       |
 | TC-013    |        |       |
-| TC-014    |        |       |
-| TC-015    |        |       |
+| TC-014    |  Pass  |       |
+| TC-015    |  Pass  |       |
 | TC-016    |        |       |
 | TC-017    |        |       |
 | TC-018    |        |       |
 | TC-019    |        |       |
 | TC-020    |        |       |
-| TC-022    |        |       |
+| TC-021    |  Pass  |       |
+| TC-022    |  Pass  |       |
 | TC-023    |        |       |
-| TC-024    |        |       |
+| TC-024    |  Pass  |       |
 | TC-025    |        |       |
 | TC-026    |        |       |
 
@@ -99,4 +100,6 @@ Release blocked
 
 # Notes
 
-Free-form observations recorded during release validation.
+Discovered #20 and #22 while running tests requiring manifest-override on the Air3.  
+Restarted the test after fixing each issue.
+

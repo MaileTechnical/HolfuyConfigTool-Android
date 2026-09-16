@@ -446,10 +446,6 @@ Each test case below specifies expected results in addition to these:
 * Remains responsive.
 * Diagnostic history records the USB device detachment and firmware-update interruption.
 
-**Weather Station**
-
-* Boots the previously installed firmware.
-
 ---
 
 ## TC-007 — Unsupported USB Device
@@ -590,7 +586,7 @@ Each test case below specifies expected results in addition to these:
 
 **Reference Workflow:** WF-001
 
-**Classification:** Historical
+**Classification:** Regression
 
 **Variation:** IP-8: Tap **Select Firmware**.
 
