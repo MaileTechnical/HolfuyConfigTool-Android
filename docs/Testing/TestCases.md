@@ -1087,11 +1087,12 @@ repository or selected firmware, and that the application clearly indicates the 
 2. Verify that the Selected Firmware card identifies the selected firmware as **Current**.
 3. Set the manifest URL override to `invalid_json.json`:
 
-       adb shell am start \
-         -n com.holfuy.configtool/.DebugManifestActivity \
-         -a com.holfuy.configtool.debug.SET_MANIFEST_URL \
-         --es url "https://raw.githubusercontent.com/MaileTechnical/HolfuyConfigTool-Android/test-data-v2/docs/Testing/TestData/FirmwareRepository/InvalidManifest/invalid_json.json"
-
+   ```bash
+   adb shell am start \
+     -n com.holfuy.configtool/.DebugManifestActivity \
+     -a com.holfuy.configtool.debug.SET_MANIFEST_URL \
+     --es url "https://raw.githubusercontent.com/MaileTechnical/HolfuyConfigTool-Android/test-data-v2/docs/Testing/TestData/FirmwareRepository/InvalidManifest/invalid_json.json"
+   ```
 4. Cause the application to resume, initiating a repository refresh.
 5. Wait for the refresh to complete.
 6. Verify that the application displays an invalid-manifest error indication.
@@ -1101,11 +1102,12 @@ repository or selected firmware, and that the application clearly indicates the 
 10. Return to the main screen.
 11. Set the manifest URL override to `missing_sha256.json`:
 
-       adb shell am start \
-         -n com.holfuy.configtool/.DebugManifestActivity \
-         -a com.holfuy.configtool.debug.SET_MANIFEST_URL \
-         --es url "https://raw.githubusercontent.com/MaileTechnical/HolfuyConfigTool-Android/test-data-v2/docs/Testing/TestData/FirmwareRepository/InvalidManifest/missing_sha256.json"
-
+   ```bash
+   adb shell am start \
+     -n com.holfuy.configtool/.DebugManifestActivity \
+     -a com.holfuy.configtool.debug.SET_MANIFEST_URL \
+     --es url "https://raw.githubusercontent.com/MaileTechnical/HolfuyConfigTool-Android/test-data-v2/docs/Testing/TestData/FirmwareRepository/InvalidManifest/missing_sha256.json"
+   ```
 12. Cause the application to resume, initiating a repository refresh.
 13. Wait for the refresh to complete.
 14. Verify that the application displays an invalid-manifest error indication.
