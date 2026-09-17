@@ -87,7 +87,10 @@ simplest thing to try is:
 1. Turn on the station.  
 1. Continue with the process described above, starting with tapping **Connect**.
 
-### Firmware update fails
+### Firmware update issues
+
+If the app indicates the station is connected but **Update Firmware** is not enabled, 
+ensure a firmware file is seleced.  If no firmware file is selected, tap **Select Firmware** and select one.
 
 Verify that:
 

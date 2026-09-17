@@ -48,12 +48,12 @@
 | TC-005    |  Pass  |       |
 | TC-006    |  Pass  |       |
 | TC-007    |  Pass  |       |
-| TC-008    |        |       |
-| TC-009    |        |       |
+| TC-008    |  Pass  |       |
+| TC-009    |  Fail  | Passed on all devices except Air3, where it fails only when Back is tapped.  See #23. |
 | TC-010    |  Hist  |       |
 | TC-011    |  Hist  |       |
-| TC-012    |        |       |
-| TC-013    |        |       |
+| TC-012    |  Pass  |       |
+| TC-013    |  Pass  |       |
 | TC-014    |  Pass  |       |
 | TC-015    |  Pass  |       |
 | TC-016    |        |       |
@@ -68,6 +68,7 @@
 | TC-025    |        |       |
 | TC-026    |        |       |
 
+"Hist" indicates a historical test case that was not executed for this release.
 
 ---
 
@@ -84,7 +85,9 @@
 
 # Issues Found
 
-- None
+- #20 - Resolved, test restarted.
+- #22 - Resolved, test restarted.
+- #23 - Resolution exists in a branch and will be included in a future release.
 
 ---
 
@@ -93,6 +96,8 @@
 Approved for release
 
 Approved with known issues:
+
+- #23
 
 Release blocked
 
