@@ -642,7 +642,7 @@ Each test case below specifies expected results in addition to these:
 
 **Reference Workflow:** WF-003
 
-**Classification:** Regression, Compatibility
+**Classification:** Regression
 
 **Variation:** IP-10: Cancel repository directory selection.
 
@@ -687,10 +687,11 @@ Verify that failure to retrieve the firmware repository manifest does not make a
 13. Verify that the previously selected firmware remains selected and usable.
 14. Verify that the application reports the date and time of the last successful check for firmware.
 15. Verify that the application reports the date and time it was unable to check for firmware.
-16. Restore Internet connectivity on the Android device.
-17. Cause the application to resume, initiating a repository refresh.
-18. Wait for the refresh to complete.
-19. Verify that normal repository synchronization resumes.
+16. Proceed with firmware update process and ensure it completes successfully.
+17. Restore Internet connectivity on the Android device.
+18. Cause the application to resume, initiating a repository refresh.
+19. Wait for the refresh to complete.
+20. Verify that normal repository synchronization resumes.
 
 ### Expected Results
 

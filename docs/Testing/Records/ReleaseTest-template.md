@@ -68,18 +68,6 @@
 | TC-025    |        |       |
 | TC-026    |        |       |
 
-
----
-
-# Compatibility Summary
-
-| Android Version | Status | Notes |
-| --------------- | ------ | ----- |
-| 8.1             |        |       |
-| 12              |        |       |
-| 15              |        |       |
-| 16              |        |       |
-
 ---
 
 # Issues Found
