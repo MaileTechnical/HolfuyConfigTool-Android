@@ -1,5 +1,7 @@
 package com.holfuy.configtool.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -58,6 +60,25 @@ fun HelpScreen(
             onClick = onSendDiagnostics
         ) {
             Text("Send Diagnostics")
+        }
+
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+
+        Button(
+            onClick = {
+                context.startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(
+                            "https://github.com/MaileTechnical/HolfuyConfigTool-Android/blob/master/PrivacyPolicy.md"
+                        )
+                    )
+                )
+            }
+        ) {
+            Text("Privacy Policy")
         }
 
         Spacer(
